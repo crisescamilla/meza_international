@@ -1,0 +1,21 @@
+{
+  "name": "meza-international-website",
+  "version": "1.0.0",
+  "description": "Website for Meza International Truck and Trailer Repair",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/index.html",
+    "start": "live-server --port=3000 --open=/index.html"
+  },
+  "keywords": [
+    "truck-repair",
+    "trailer-repair",
+    "website",
+    "meza-international"
+  ],
+  "author": "Meza International",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
