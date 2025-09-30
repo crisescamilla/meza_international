@@ -3,7 +3,7 @@ node_modules/
 package-lock.json
 
 # Images (keep only essential ones for the website)
-img/
+img/*
 !img/gruameza.jpg
 !img/motor.jpg
 !img/frenos.jpg
