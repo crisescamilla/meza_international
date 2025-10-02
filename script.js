@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('main-content');
     const logoVideo = document.getElementById('logo-video');
     
-    // Add loading class to body initially
+    // Add loading class to body and html initially
     document.body.classList.add('loading');
+    document.documentElement.classList.add('loading');
     
     // Function to hide loading screen and show main content
     function showMainContent() {
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show main content after a short delay
         setTimeout(() => {
             document.body.classList.remove('loading');
+            document.documentElement.classList.remove('loading');
             mainContent.classList.add('show');
             
             // Remove loading screen from DOM after transition
@@ -27,14 +29,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle video events
     if (logoVideo) {
-        // When video ends, show main content
+        // Stop video and show main content after 4 seconds
+        logoVideo.addEventListener('timeupdate', function() {
+            if (logoVideo.currentTime >= 4) {
+                logoVideo.pause();
+                showMainContent();
+            }
+        });
+        
+        // When video ends naturally (if shorter than 4 seconds), show main content
         logoVideo.addEventListener('ended', showMainContent);
         
         // If video fails to load or takes too long, show content anyway
         logoVideo.addEventListener('error', showMainContent);
         
-        // Fallback: show content after maximum 8 seconds regardless
-        setTimeout(showMainContent, 8000);
+        // Fallback: show content after maximum 4 seconds regardless
+        setTimeout(showMainContent, 4000);
     } else {
         // If video element doesn't exist, show content immediately
         showMainContent();
@@ -121,40 +131,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Contact Form Handling
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const phone = formData.get('phone');
-            const service = formData.get('service');
-            const message = formData.get('message');
-            
-            // Basic validation
-            if (!name || !email || !service || !message) {
-                showNotification('Please fill in all required fields.', 'error');
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('Please enter a valid email address.', 'error');
-                return;
-            }
-            
-            // Simulate form submission
-            showNotification('Thank you for your message! We will contact you soon.', 'success');
-            
-            // Reset form
-            this.reset();
-        });
-    }
 
     // Scroll to top functionality
     const scrollToTopBtn = document.createElement('button');
@@ -724,3 +700,117 @@ window.MezaWebsite = {
     showNotification,
     animateElement
 };
+
+// Contact Form Handling with Location Selection
+document.addEventListener('DOMContentLoaded', function() {
+    let formDataStored = null;
+    
+    const contactForm = document.getElementById('contactForm');
+    const locationModal = document.getElementById('locationModal');
+    const locationButtons = document.querySelectorAll('.location-btn');
+    const cancelLocationModal = document.getElementById('cancelLocationModal');
+    
+    if (contactForm && locationModal) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const service = document.getElementById('service').value;
+            const message = document.getElementById('message').value;
+            
+            // Basic validation
+            if (!name || !email || !service || !message) {
+                alert('Por favor llena todos los campos requeridos.');
+                return false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor ingresa un correo electrónico válido.');
+                return false;
+            }
+            
+            // Store form data
+            formDataStored = {
+                name: name,
+                email: email,
+                phone: phone || 'No proporcionado',
+                service: service,
+                message: message
+            };
+            
+            // Show location selection modal
+            locationModal.classList.add('show');
+            
+            return false;
+        });
+        
+        // Handle location selection
+        locationButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const location = this.getAttribute('data-location');
+                
+                if (formDataStored) {
+                    // Phone numbers for each location
+                    const phoneNumbers = {
+                        california: '19097439091',
+                        arkansas: '14798862439'
+                    };
+                    
+                    // Get service name from select option
+                    const serviceSelect = document.getElementById('service');
+                    const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+                    
+                    // Create WhatsApp message with proper line breaks
+                    const whatsappMessage = 
+                        '🔧 *Nueva Solicitud de Cotización*\n\n' +
+                        '*Nombre:* ' + formDataStored.name + '\n' +
+                        '*Email:* ' + formDataStored.email + '\n' +
+                        '*Teléfono:* ' + formDataStored.phone + '\n' +
+                        '*Servicio Requerido:* ' + serviceText + '\n\n' +
+                        '*Mensaje:*\n' + formDataStored.message;
+                    
+                    // Encode message for URL (this will convert \n to %0A automatically)
+                    const encodedMessage = encodeURIComponent(whatsappMessage);
+                    
+                    // Create WhatsApp URL
+                    const whatsappUrl = 'https://wa.me/' + phoneNumbers[location] + '?text=' + encodedMessage;
+                    
+                    // Open WhatsApp
+                    window.open(whatsappUrl, '_blank');
+                    
+                    // Close modal
+                    locationModal.classList.remove('show');
+                    
+                    // Reset form
+                    contactForm.reset();
+                    formDataStored = null;
+                    
+                    // Optional: Show success message
+                    alert('¡Abriendo WhatsApp! Tu mensaje está listo para enviar.');
+                }
+            });
+        });
+        
+        // Handle modal cancel
+        if (cancelLocationModal) {
+            cancelLocationModal.addEventListener('click', function() {
+                locationModal.classList.remove('show');
+                formDataStored = null;
+            });
+        }
+        
+        // Close modal when clicking outside
+        locationModal.addEventListener('click', function(e) {
+            if (e.target === locationModal) {
+                locationModal.classList.remove('show');
+                formDataStored = null;
+            }
+        });
+    }
+});

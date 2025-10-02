@@ -13,7 +13,7 @@
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
             <video id="logo-video" class="logo-video" autoplay muted playsinline>
-                <source src="img/logo_animado.mp4" type="video/mp4">
+                <source src="img/logo animado_agila_trailer.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <div class="loading-text">
@@ -636,6 +636,27 @@
         </div>
     </footer>
     </div> <!-- End main-content -->
+
+    <!-- Location Selection Modal -->
+    <div id="locationModal" class="location-modal">
+        <div class="location-modal-content">
+            <h3>Select Office Location</h3>
+            <p>Where would you like to send your quote request?</p>
+            <div class="location-buttons">
+                <button class="location-btn" data-location="california">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="location-name">California</span>
+                    <span class="location-phone">1(909)-743-9091</span>
+                </button>
+                <button class="location-btn" data-location="arkansas">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="location-name">Arkansas</span>
+                    <span class="location-phone">1(479)886-2439</span>
+                </button>
+            </div>
+            <button class="location-cancel" id="cancelLocationModal">Cancel</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
