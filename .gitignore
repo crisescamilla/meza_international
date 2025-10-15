@@ -34,6 +34,8 @@ img/*
 !img/IMG-20240410-WA0101.jpg
 !img/IMG-20240410-WA0104.jpg
 !img/repcaja.jpg
+!img/logo animado_agila_trailer.mp4
+!img/logo_animado.mp4
 
 # Logs
 npm-debug.log*
