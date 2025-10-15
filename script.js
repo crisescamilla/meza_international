@@ -119,8 +119,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show skip button after 2 seconds
         setTimeout(() => {
-            skipButton.style.opacity = '1';
-            skipButton.style.visibility = 'visible';
+            if (skipButton) {
+                skipButton.style.opacity = '1';
+                skipButton.style.visibility = 'visible';
+            }
         }, 2000);
     }
 });
