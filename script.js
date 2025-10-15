@@ -1,129 +1,154 @@
-// Loading Screen Functionality
+// Loading Screen Functionality - MEJORADO PARA NETLIFY
 document.addEventListener('DOMContentLoaded', function() {
-    // Loading Screen Elements
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
     const logoVideo = document.getElementById('logo-video');
     const skipButton = document.getElementById('skip-loading');
     
-    // Add loading class to body and html initially
     document.body.classList.add('loading');
     document.documentElement.classList.add('loading');
     
-    // Function to hide loading screen and show main content
+    let hasShownContent = false;
+    let videoAttempts = 0;
+    const MAX_ATTEMPTS = 5;
+    
     function showMainContent() {
-        // Fade out loading screen
+        if (hasShownContent) return;
+        hasShownContent = true;
+        
+        console.log('🎬 Mostrando contenido principal');
+        
+        if (logoVideo && !logoVideo.paused) {
+            logoVideo.pause();
+        }
+        
         loadingScreen.classList.add('fade-out');
         
-        // Show main content after a short delay
         setTimeout(() => {
             document.body.classList.remove('loading');
             document.documentElement.classList.remove('loading');
             mainContent.classList.add('show');
             
-            // Remove loading screen from DOM after transition
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
             }, 1500);
         }, 500);
     }
     
-    // Handle video events with improved autoplay support
     if (logoVideo) {
-        let videoPlayed = false;
-        let fallbackTimer = null;
+        console.log('📹 Iniciando carga de video...');
         
-        // Function to attempt video play
+        // Función mejorada para forzar reproducción
         function attemptVideoPlay() {
-            if (videoPlayed) return;
+            if (videoAttempts >= MAX_ATTEMPTS || hasShownContent) return;
             
+            videoAttempts++;
+            console.log(`🔄 Intento ${videoAttempts} de reproducir video`);
+            
+            // Asegurar que el video esté configurado correctamente
+            logoVideo.muted = true;
+            logoVideo.volume = 0;
+            logoVideo.playbackRate = 1.0;
+            logoVideo.defaultMuted = true;
+            
+            // Intentar reproducir
             const playPromise = logoVideo.play();
             
             if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Video started playing successfully
-                    videoPlayed = true;
-                    console.log('Video started playing');
-                }).catch(error => {
-                    // Autoplay was prevented
-                    console.log('Autoplay prevented:', error);
-                    // Show fallback image and continue
-                    showVideoFallback();
-                });
+                playPromise
+                    .then(() => {
+                        console.log('✅ Video reproduciéndose correctamente');
+                    })
+                    .catch(error => {
+                        console.warn('⚠️ Autoplay bloqueado:', error.message);
+                        
+                        // Si falló, mostrar imagen fallback
+                        if (videoAttempts >= MAX_ATTEMPTS) {
+                            console.log('❌ Mostrando imagen de respaldo');
+                            const fallbackImg = document.querySelector('.logo-fallback');
+                            if (fallbackImg) {
+                                logoVideo.style.display = 'none';
+                                fallbackImg.style.display = 'block';
+                            }
+                        } else {
+                            // Reintentar después de un breve delay
+                            setTimeout(attemptVideoPlay, 100);
+                        }
+                    });
             }
         }
         
-        // Function to show fallback when video can't play
-        function showVideoFallback() {
-            const fallbackImg = logoVideo.querySelector('.logo-fallback');
-            if (fallbackImg) {
-                logoVideo.style.display = 'none';
-                fallbackImg.style.display = 'block';
-            }
-        }
+        // Múltiples intentos de reproducción
+        attemptVideoPlay(); // Intento inmediato
+        setTimeout(attemptVideoPlay, 50);
+        setTimeout(attemptVideoPlay, 150);
+        setTimeout(attemptVideoPlay, 300);
         
-        // Try to play video immediately
-        attemptVideoPlay();
+        // Configurar temporizadores
+        let contentTimer = setTimeout(() => {
+            console.log('⏱️ Tiempo de video completado (4 segundos)');
+            showMainContent();
+        }, 4000);
         
-        // Also try after a short delay (some browsers need user interaction first)
-        setTimeout(attemptVideoPlay, 100);
-        
-        // Stop video and show main content after 4 seconds
+        // Cuando el video alcanza 4 segundos
         logoVideo.addEventListener('timeupdate', function() {
-            if (logoVideo.currentTime >= 4) {
-                logoVideo.pause();
+            if (this.currentTime >= 4 && !hasShownContent) {
+                console.log('🎯 Video alcanzó 4 segundos');
+                clearTimeout(contentTimer);
                 showMainContent();
             }
         });
         
-        // When video ends naturally (if shorter than 4 seconds), show main content
-        logoVideo.addEventListener('ended', showMainContent);
-        
-        // If video fails to load or takes too long, show content anyway
-        logoVideo.addEventListener('error', function() {
-            console.log('Video failed to load');
-            showVideoFallback();
+        // Si el video termina antes de 4 segundos
+        logoVideo.addEventListener('ended', function() {
+            console.log('🏁 Video terminó naturalmente');
+            clearTimeout(contentTimer);
             showMainContent();
         });
         
-        // Handle video loading
+        // Si hay error cargando el video
+        logoVideo.addEventListener('error', function(e) {
+            console.error('❌ Error cargando video:', e);
+            clearTimeout(contentTimer);
+            
+            // Mostrar imagen fallback
+            const fallbackImg = document.querySelector('.logo-fallback');
+            if (fallbackImg) {
+                logoVideo.style.display = 'none';
+                fallbackImg.style.display = 'block';
+            }
+            
+            // Mostrar contenido después de 2 segundos con imagen
+            setTimeout(showMainContent, 2000);
+        });
+        
+        // Detectar cuando el video está listo
         logoVideo.addEventListener('loadeddata', function() {
-            console.log('Video loaded successfully');
+            console.log('📦 Video cargado y listo');
             attemptVideoPlay();
         });
         
-        // Fallback: show content after maximum 4 seconds regardless
-        fallbackTimer = setTimeout(showMainContent, 4000);
-        
-        // Clear fallback timer if video plays successfully
-        logoVideo.addEventListener('play', function() {
-            if (fallbackTimer) {
-                clearTimeout(fallbackTimer);
-            }
+        logoVideo.addEventListener('canplay', function() {
+            console.log('▶️ Video puede reproducirse');
         });
         
     } else {
-        // If video element doesn't exist, show content immediately
+        console.warn('⚠️ Elemento de video no encontrado');
         showMainContent();
     }
     
-    // Handle skip button
+    // Skip button
     if (skipButton) {
         skipButton.addEventListener('click', function() {
-            // Pause video if it's playing
-            if (logoVideo && !logoVideo.paused) {
-                logoVideo.pause();
-            }
+            console.log('⏭️ Usuario saltó la animación');
             showMainContent();
         });
         
-        // Show skip button after 2 seconds
+        // Mostrar botón skip después de 1.5 segundos
         setTimeout(() => {
-            if (skipButton) {
-                skipButton.style.opacity = '1';
-                skipButton.style.visibility = 'visible';
-            }
-        }, 2000);
+            skipButton.style.opacity = '1';
+            skipButton.style.visibility = 'visible';
+        }, 1500);
     }
 });
 
