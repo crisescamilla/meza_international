@@ -12,13 +12,19 @@
     <!-- Loading Screen with Animated Logo -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
-            <video id="logo-video" class="logo-video" autoplay muted playsinline>
+            <video id="logo-video" class="logo-video" muted playsinline loop preload="auto">
                 <source src="img/logo animado_agila_trailer.mp4" type="video/mp4">
-                Your browser does not support the video tag.
+                <source src="img/logo_animado.mp4" type="video/mp4">
+                <!-- Fallback image when video is not supported -->
+                <img src="img/logo1.jpg" alt="Meza International Logo" class="logo-fallback">
             </video>
             <div class="loading-text">
                 <h2>Meza International</h2>
                 <p>Truck and Trailer Repair</p>
+                <button id="skip-loading" class="skip-button" aria-label="Skip loading animation">
+                    <i class="fas fa-forward"></i>
+                    Skip
+                </button>
             </div>
         </div>
     </div>
