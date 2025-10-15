@@ -69,6 +69,36 @@
     object-fit: cover;
 }
 
+.logo-static {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 0 4px rgba(255, 255, 255, 0.1),
+        inset 0 2px 0 rgba(255, 255, 255, 0.2);
+    margin-bottom: 1.5rem;
+    object-fit: cover;
+    animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    0% {
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            0 0 0 4px rgba(255, 255, 255, 0.1),
+            inset 0 2px 0 rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.6),
+            0 0 0 4px rgba(255, 255, 255, 0.3),
+            inset 0 2px 0 rgba(255, 255, 255, 0.4),
+            0 0 30px rgba(255, 255, 255, 0.2);
+    }
+}
+
 .loading-text {
     width: 100%;
 }

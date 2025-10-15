@@ -35,8 +35,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
     
-    if (logoVideo) {
+    // Check if we're using static image or video
+    const logoStatic = document.querySelector('.logo-static');
+    
+    if (logoStatic) {
+        console.log('🖼️ Usando imagen estática del logo');
+        
+        // Show content after 3 seconds with static image
+        setTimeout(() => {
+            console.log('⏱️ Tiempo de imagen estática completado (3 segundos)');
+            showMainContent();
+        }, 3000);
+        
+    } else if (logoVideo) {
         console.log('📹 Iniciando carga de video...');
+        
+        // Detectar errores de decodificación temprano
+        setTimeout(() => {
+            if (logoVideo.readyState === 0 && !hasShownContent) {
+                console.warn('⚠️ Video no se está cargando, mostrando imagen estática');
+                const fallbackImg = document.querySelector('.logo-fallback');
+                if (fallbackImg) {
+                    logoVideo.style.display = 'none';
+                    fallbackImg.style.display = 'block';
+                }
+                setTimeout(showMainContent, 2000);
+            }
+        }, 1000);
         
         // Función mejorada para forzar reproducción
         function attemptVideoPlay() {
@@ -111,15 +136,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('❌ Error cargando video:', e);
             clearTimeout(contentTimer);
             
-            // Mostrar imagen fallback
+            // Mostrar imagen fallback inmediatamente
             const fallbackImg = document.querySelector('.logo-fallback');
             if (fallbackImg) {
                 logoVideo.style.display = 'none';
                 fallbackImg.style.display = 'block';
+                console.log('🖼️ Mostrando imagen estática como fallback');
             }
             
             // Mostrar contenido después de 2 segundos con imagen
             setTimeout(showMainContent, 2000);
+        });
+        
+        // Detectar errores de decodificación específicamente
+        logoVideo.addEventListener('loadstart', function() {
+            console.log('🚀 Iniciando carga del video...');
+        });
+        
+        logoVideo.addEventListener('progress', function() {
+            console.log('📈 Progreso de carga del video');
         });
         
         // Detectar cuando el video está listo
