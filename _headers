@@ -1,0 +1,29 @@
+# Netlify Headers Configuration
+# Optimize video delivery and caching
+
+# Video files - enable aggressive caching
+/video/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Image files - enable caching
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files - short cache for updates
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# CSS and JS files - medium cache
+/*.css
+  Cache-Control: public, max-age=86400
+
+/*.js
+  Cache-Control: public, max-age=86400
+
+# Enable CORS for video files
+/video/*
+  Access-Control-Allow-Origin: *
+
+# Enable range requests for video streaming
+/video/*
+  Accept-Ranges: bytes

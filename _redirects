@@ -1,0 +1,7 @@
+# Netlify Redirects Configuration
+
+# Redirect root to index.html
+/ /index.html 200
+
+# Handle SPA routing (if needed in the future)
+/* /index.html 200

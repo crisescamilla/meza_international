@@ -1,0 +1,52 @@
+[build]
+  publish = "."
+  command = "echo 'No build command needed for static site'"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Headers for better performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Video optimization
+[[headers]]
+  for = "/img/*.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Encoding = "gzip"
+    Accept-Ranges = "bytes"
+
+# Image optimization
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# CSS and JS files
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

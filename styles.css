@@ -55,6 +55,20 @@
     margin-bottom: 1.5rem;
 }
 
+.logo-fallback {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 0 4px rgba(255, 255, 255, 0.1),
+        inset 0 2px 0 rgba(255, 255, 255, 0.2);
+    margin-bottom: 1.5rem;
+    display: none; /* Hidden by default, shown when video fails */
+    object-fit: cover;
+}
+
 .loading-text {
     width: 100%;
 }
@@ -78,6 +92,38 @@
         0 0 10px rgba(255, 255, 255, 0.3),
         0 2px 4px rgba(0, 0, 0, 0.6);
     letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.skip-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto;
+    letter-spacing: 0.5px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.skip-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.skip-button:active {
+    transform: translateY(0);
 }
 
 /* Responsive adjustments for loading screen */
