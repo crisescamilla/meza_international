@@ -79,7 +79,9 @@
         0 0 0 4px rgba(255, 255, 255, 0.1),
         inset 0 2px 0 rgba(255, 255, 255, 0.2);
     margin-bottom: 1.5rem;
-    object-fit: cover;
+    object-fit: contain; /* Changed from cover to contain */
+    object-position: center;
+    display: block;
     animation: logoGlow 2s ease-in-out infinite alternate;
 }
 
@@ -156,6 +158,14 @@
     transform: translateY(0);
 }
 
+/* Ensure consistent logo sizing across all devices */
+.logo-video, .logo-static, .logo-fallback {
+    max-height: 400px;
+    aspect-ratio: 1;
+    object-fit: contain;
+    object-position: center;
+}
+
 /* Responsive adjustments for loading screen */
 @media (max-width: 768px) {
     .loading-content {
@@ -163,9 +173,10 @@
         max-width: 90%;
     }
     
-    .logo-video {
+    .logo-video, .logo-static, .logo-fallback {
         max-width: 300px;
         margin-bottom: 1rem;
+        aspect-ratio: 1; /* Ensure square aspect ratio */
     }
     
     .loading-text h2 {
@@ -179,8 +190,9 @@
 }
 
 @media (max-width: 480px) {
-    .logo-video {
+    .logo-video, .logo-static, .logo-fallback {
         max-width: 250px;
+        aspect-ratio: 1;
     }
     
     .loading-text h2 {
