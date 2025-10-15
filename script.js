@@ -1,123 +1,100 @@
-// Loading Screen Functionality
+// Loading Screen Functionality - IMPROVED
 document.addEventListener('DOMContentLoaded', function() {
-    // Loading Screen Elements
     const loadingScreen = document.getElementById('loading-screen');
     const mainContent = document.getElementById('main-content');
     const logoVideo = document.getElementById('logo-video');
     const skipButton = document.getElementById('skip-loading');
     
-    // Add loading class to body and html initially
     document.body.classList.add('loading');
     document.documentElement.classList.add('loading');
     
-    // Function to hide loading screen and show main content
+    let hasShownContent = false;
+    
     function showMainContent() {
-        // Fade out loading screen
+        if (hasShownContent) return;
+        hasShownContent = true;
+        
+        if (logoVideo) {
+            logoVideo.pause();
+        }
+        
         loadingScreen.classList.add('fade-out');
         
-        // Show main content after a short delay
         setTimeout(() => {
             document.body.classList.remove('loading');
             document.documentElement.classList.remove('loading');
             mainContent.classList.add('show');
             
-            // Remove loading screen from DOM after transition
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
             }, 1500);
         }, 500);
     }
     
-    // Handle video events with improved autoplay support
     if (logoVideo) {
-        let videoPlayed = false;
-        let fallbackTimer = null;
-        
-        // Function to attempt video play
-        function attemptVideoPlay() {
-            if (videoPlayed) return;
+        // Force play immediately with multiple attempts
+        function forcePlay() {
+            logoVideo.muted = true;
+            logoVideo.volume = 0;
+            logoVideo.playbackRate = 1.0;
             
             const playPromise = logoVideo.play();
             
             if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Video started playing successfully
-                    videoPlayed = true;
-                    console.log('Video started playing');
-                }).catch(error => {
-                    // Autoplay was prevented
-                    console.log('Autoplay prevented:', error);
-                    // Show fallback image and continue
-                    showVideoFallback();
-                });
+                playPromise
+                    .then(() => {
+                        console.log('✓ Video playing successfully');
+                    })
+                    .catch(error => {
+                        console.log('✗ Autoplay blocked:', error);
+                        // Show fallback immediately if autoplay fails
+                        const fallbackImg = logoVideo.nextElementSibling;
+                        if (fallbackImg && fallbackImg.classList.contains('logo-fallback')) {
+                            logoVideo.style.display = 'none';
+                            fallbackImg.style.display = 'block';
+                        }
+                    });
             }
         }
         
-        // Function to show fallback when video can't play
-        function showVideoFallback() {
-            const fallbackImg = logoVideo.querySelector('.logo-fallback');
-            if (fallbackImg) {
-                logoVideo.style.display = 'none';
-                fallbackImg.style.display = 'block';
-            }
-        }
+        // Attempt 1: Immediate play
+        forcePlay();
         
-        // Try to play video immediately
-        attemptVideoPlay();
+        // Attempt 2: After 50ms
+        setTimeout(forcePlay, 50);
         
-        // Also try after a short delay (some browsers need user interaction first)
-        setTimeout(attemptVideoPlay, 100);
+        // Attempt 3: After 100ms
+        setTimeout(forcePlay, 100);
         
-        // Stop video and show main content after 4 seconds
+        // Show content after 4 seconds or when video ends
+        let contentTimer = setTimeout(showMainContent, 4000);
+        
         logoVideo.addEventListener('timeupdate', function() {
-            if (logoVideo.currentTime >= 4) {
-                logoVideo.pause();
+            if (this.currentTime >= 4) {
+                clearTimeout(contentTimer);
                 showMainContent();
             }
         });
         
-        // When video ends naturally (if shorter than 4 seconds), show main content
-        logoVideo.addEventListener('ended', showMainContent);
-        
-        // If video fails to load or takes too long, show content anyway
-        logoVideo.addEventListener('error', function() {
-            console.log('Video failed to load');
-            showVideoFallback();
+        logoVideo.addEventListener('ended', function() {
+            clearTimeout(contentTimer);
             showMainContent();
         });
         
-        // Handle video loading
-        logoVideo.addEventListener('loadeddata', function() {
-            console.log('Video loaded successfully');
-            attemptVideoPlay();
-        });
-        
-        // Fallback: show content after maximum 4 seconds regardless
-        fallbackTimer = setTimeout(showMainContent, 4000);
-        
-        // Clear fallback timer if video plays successfully
-        logoVideo.addEventListener('play', function() {
-            if (fallbackTimer) {
-                clearTimeout(fallbackTimer);
-            }
+        logoVideo.addEventListener('error', function() {
+            console.log('✗ Video load error');
+            clearTimeout(contentTimer);
+            showMainContent();
         });
         
     } else {
-        // If video element doesn't exist, show content immediately
         showMainContent();
     }
     
-    // Handle skip button
+    // Skip button
     if (skipButton) {
-        skipButton.addEventListener('click', function() {
-            // Pause video if it's playing
-            if (logoVideo && !logoVideo.paused) {
-                logoVideo.pause();
-            }
-            showMainContent();
-        });
+        skipButton.addEventListener('click', showMainContent);
         
-        // Show skip button after 2 seconds
         setTimeout(() => {
             if (skipButton) {
                 skipButton.style.opacity = '1';
