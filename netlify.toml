@@ -19,8 +19,8 @@
   for = "/img/*.mp4"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Content-Encoding = "gzip"
     Accept-Ranges = "bytes"
+    Content-Type = "video/mp4"
 
 # Image optimization
 [[headers]]

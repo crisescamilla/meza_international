@@ -12,15 +12,16 @@
     <!-- Loading Screen with Animated Logo -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
-            <!-- Temporarily using static image due to video decoding issues -->
-            <img src="img/logo1.jpg" alt="Meza International Logo" class="logo-static" style="display: block;">
-            
-            <!-- Video hidden temporarily -->
-            <video id="logo-video" class="logo-video" muted playsinline loop preload="auto" style="display: none;">
+            <!-- Try video first, fallback to image -->
+            <video id="logo-video" class="logo-video" autoplay muted playsinline loop preload="metadata">
                 <source src="img/logo_animado_agila_trailer.mp4" type="video/mp4">
                 <source src="img/logo_animado.mp4" type="video/mp4">
+                <!-- Fallback image when video fails -->
                 <img src="img/logo1.jpg" alt="Meza International Logo" class="logo-fallback">
             </video>
+            
+            <!-- Static image as backup -->
+            <img src="img/logo1.jpg" alt="Meza International Logo" class="logo-static" style="display: none;">
             <div class="loading-text">
                 <h2>Meza International</h2>
                 <p>Truck and Trailer Repair</p>
