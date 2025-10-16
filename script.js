@@ -904,12 +904,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Create WhatsApp message with proper line breaks
                     const whatsappMessage = 
-                        '🔧 *Nueva Solicitud de Cotización*\n\n' +
-                        '*Nombre:* ' + formDataStored.name + '\n' +
+                        '🔧 *New Request for Quote*\n\n' +
+                        '*Name:* ' + formDataStored.name + '\n' +
                         '*Email:* ' + formDataStored.email + '\n' +
-                        '*Teléfono:* ' + formDataStored.phone + '\n' +
-                        '*Servicio Requerido:* ' + serviceText + '\n\n' +
-                        '*Mensaje:*\n' + formDataStored.message;
+                        '*Telephone:* ' + formDataStored.phone + '\n' +
+                        '*Required Service:* ' + serviceText + '\n\n' +
+                        '*Message:*\n' + formDataStored.message;
                     
                     // Encode message for URL (this will convert \n to %0A automatically)
                     const encodedMessage = encodeURIComponent(whatsappMessage);
@@ -928,7 +928,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     formDataStored = null;
                     
                     // Optional: Show success message
-                    alert('¡Abriendo WhatsApp! Tu mensaje está listo para enviar.');
+                    alert('¡Opening WhatsApp! Your message is ready to send.');
                 }
             });
         });
