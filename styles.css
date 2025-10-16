@@ -1449,6 +1449,62 @@ section {
     transform: translateY(-1px);
 }
 
+/* Footer contact links styling */
+.footer-section p a {
+    color: #ffffff !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.5),
+        1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.footer-section p a:hover {
+    color: #ffffff !important;
+    text-shadow: 
+        0 0 12px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.4),
+        1px 1px 3px rgba(0, 0, 0, 0.8);
+    transform: translateY(-1px);
+}
+
+/* Contact items styling for better proportion */
+.contact-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    gap: 0.25rem;
+}
+
+.contact-label {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-shadow: 
+        0 0 6px rgba(255, 255, 255, 0.4),
+        1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.contact-item a {
+    color: #ffffff !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    word-break: break-all;
+    text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.5),
+        1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.contact-item a:hover {
+    color: #ffffff !important;
+    text-shadow: 
+        0 0 12px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.4),
+        1px 1px 3px rgba(0, 0, 0, 0.8);
+    transform: translateY(-1px);
+}
+
 .footer-bottom {
     border-top: 1px solid #374151;
     padding-top: 1rem;
