@@ -203,6 +203,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
+            // Check if this is the Services link
+            if (this.getAttribute('href') === '#services') {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Toggle services dropdown
+                const servicesContainer = document.querySelector('.services-dropdown-container');
+                
+                if (servicesContainer) {
+                    const dropdown = servicesContainer.querySelector('.services-dropdown');
+                    const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                    
+                    if (dropdown && overlay) {
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.classList.remove('show');
+                            overlay.classList.remove('show');
+                        } else {
+                            // Force centering styles
+                            dropdown.style.position = 'fixed';
+                            dropdown.style.top = '50%';
+                            dropdown.style.left = '50%';
+                            dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
+                            dropdown.style.zIndex = '1000';
+                            
+                            dropdown.classList.add('show');
+                            overlay.classList.add('show');
+                        }
+                    }
+                }
+                return;
+            }
+            
             e.preventDefault();
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
@@ -252,19 +284,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        question.addEventListener('click', function() {
-            const isActive = item.classList.contains('active');
-            
-            // Close all FAQ items
-            faqItems.forEach(faqItem => {
-                faqItem.classList.remove('active');
+        if (question) {
+            question.addEventListener('click', function() {
+                const isActive = item.classList.contains('active');
+                
+                // Close all FAQ items
+                faqItems.forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
             });
-            
-            // Open clicked item if it wasn't active
-            if (!isActive) {
-                item.classList.add('active');
-            }
-        });
+        }
     });
 
 
@@ -663,6 +697,35 @@ document.addEventListener('click', (e) => {
 // Smooth scrolling for sticky navigation links
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('sticky-nav-link')) {
+        // Check if this is the Services link
+        if (e.target.getAttribute('href') === '#services') {
+            e.preventDefault();
+            e.stopPropagation();
+            // Toggle services dropdown
+            const servicesContainer = document.querySelector('.services-dropdown-container');
+            if (servicesContainer) {
+                const dropdown = servicesContainer.querySelector('.services-dropdown');
+                const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                if (dropdown && overlay) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                        overlay.classList.remove('show');
+                    } else {
+                        // Force centering styles
+                        dropdown.style.position = 'fixed';
+                        dropdown.style.top = '50%';
+                        dropdown.style.left = '50%';
+                        dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
+                        dropdown.style.zIndex = '1000';
+                        
+                        dropdown.classList.add('show');
+                        overlay.classList.add('show');
+                    }
+                }
+            }
+            return;
+        }
+        
         e.preventDefault();
         const targetId = e.target.getAttribute('href');
         const targetSection = document.querySelector(targetId);
@@ -831,6 +894,135 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Services Dropdown Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceTabs = document.querySelectorAll('.service-tab');
+    const servicePanels = document.querySelectorAll('.service-panel');
+    const servicesDropdown = document.querySelector('.services-dropdown');
+    const servicesContainer = document.querySelector('.services-dropdown-container');
+    
+    // Tab switching functionality
+    serviceTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetService = this.getAttribute('data-service');
+            
+            // Remove active class from all tabs and panels
+            serviceTabs.forEach(t => t.classList.remove('active'));
+            servicePanels.forEach(p => p.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding panel
+            this.classList.add('active');
+            const targetPanel = document.getElementById(targetService);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+    
+    // Close dropdown when clicking outside or on overlay
+    document.addEventListener('click', function(e) {
+        if (servicesContainer && !servicesContainer.contains(e.target)) {
+            if (servicesDropdown) {
+                const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                servicesDropdown.classList.remove('show');
+                if (overlay) {
+                    overlay.classList.remove('show');
+                }
+            }
+        }
+        
+        // Close when clicking on overlay
+        if (e.target.classList.contains('services-dropdown-overlay')) {
+            const overlay = e.target;
+            const dropdown = servicesContainer.querySelector('.services-dropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+        }
+    });
+    
+    // Mobile dropdown behavior
+    function handleMobileDropdown() {
+        if (window.innerWidth <= 768) {
+            // On mobile, make dropdown appear as modal
+            if (servicesDropdown) {
+                servicesDropdown.style.position = 'fixed';
+                servicesDropdown.style.top = '50%';
+                servicesDropdown.style.left = '50%';
+                servicesDropdown.style.transform = 'translateX(-50%) translateY(-50%)';
+                servicesDropdown.style.zIndex = '10000';
+            }
+        } else {
+            // On desktop, restore normal positioning
+            if (servicesDropdown) {
+                servicesDropdown.style.position = 'absolute';
+                servicesDropdown.style.top = '100%';
+                servicesDropdown.style.left = '50%';
+                servicesDropdown.style.transform = 'translateX(-50%)';
+                servicesDropdown.style.zIndex = '1000';
+            }
+        }
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', handleMobileDropdown);
+    
+    // Initialize mobile behavior
+    handleMobileDropdown();
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (servicesDropdown && servicesDropdown.classList.contains('show')) {
+            if (e.key === 'Escape') {
+                const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                servicesDropdown.classList.remove('show');
+                if (overlay) {
+                    overlay.classList.remove('show');
+                }
+            }
+            
+            // Tab navigation between service tabs
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                const activeTab = document.querySelector('.service-tab.active');
+                if (activeTab) {
+                    const currentIndex = Array.from(serviceTabs).indexOf(activeTab);
+                    let newIndex;
+                    
+                    if (e.key === 'ArrowLeft') {
+                        newIndex = currentIndex > 0 ? currentIndex - 1 : serviceTabs.length - 1;
+                    } else {
+                        newIndex = currentIndex < serviceTabs.length - 1 ? currentIndex + 1 : 0;
+                    }
+                    
+                    serviceTabs[newIndex].click();
+                }
+            }
+        }
+    });
+    
+    // Add smooth animations for panel transitions
+    servicePanels.forEach(panel => {
+        panel.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    });
+    
+    // Add hover effects for better UX
+    serviceTabs.forEach(tab => {
+        tab.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateY(-2px)';
+            }
+        });
+        
+        tab.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateY(0)';
+            }
+        });
+    });
+});
+
 // Export functions for potential external use
 window.MezaWebsite = {
     showNotification,
@@ -949,4 +1141,56 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+});
+
+// Image Modal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.querySelector('.modal-close');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    
+    // Get all gallery images
+    const galleryImages = document.querySelectorAll('.gallery-item img');
+    
+    // Add click event to each gallery image
+    galleryImages.forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            imageModal.classList.add('show');
+            modalImage.src = this.src;
+            modalImage.alt = this.alt;
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    // Close modal when clicking close button
+    modalClose.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        imageModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+    
+    // Close modal when clicking overlay
+    modalOverlay.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        imageModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && imageModal.classList.contains('show')) {
+            imageModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    });
 });

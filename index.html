@@ -44,7 +44,332 @@
             <nav class="nav">
                 <ul class="nav-list">
                     <li><a href="#home" class="nav-link active">Home</a></li>
-                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li class="services-dropdown-container">
+                        <a href="#services" class="nav-link services-trigger">Services <i class="fas fa-chevron-down"></i></a>
+                        <div class="services-dropdown-overlay"></div>
+                        <div class="services-dropdown">
+                            <div class="services-tabs">
+                                <button class="service-tab active" data-service="trailer">
+                                    <i class="fas fa-trailer"></i>
+                                    <span>Trailer Repair</span>
+                                </button>
+                                <button class="service-tab" data-service="truck">
+                                    <i class="fas fa-truck"></i>
+                                    <span>Truck Repair</span>
+                                </button>
+                                <button class="service-tab" data-service="differential">
+                                    <i class="fas fa-cogs"></i>
+                                    <span>Differentials & Axle</span>
+                                </button>
+                                <button class="service-tab" data-service="thermo">
+                                    <i class="fas fa-snowflake"></i>
+                                    <span>Thermo King / Carrier</span>
+                                </button>
+                                <button class="service-tab" data-service="towing">
+                                    <i class="fas fa-truck-monster"></i>
+                                    <span>Towing Wrecker</span>
+                                </button>
+                            </div>
+                            <div class="services-content">
+                                <div class="service-panel active" id="trailer">
+                                    <div class="service-header">
+                                        <h3><i class="fas fa-trailer"></i> TRAILER Repair</h3>
+                                        <p class="service-subtitle">Trailer/Container Repair</p>
+                                    </div>
+                                    <div class="service-description">
+                                        <p>Comprehensive repair service for cargo trailers, semi-trailers, and containers that attach to trucks.</p>
+                                    </div>
+                                    <div class="service-features">
+                                        <h4>Services Included:</h4>
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> Trailer structure repair</li>
+                                            <li><i class="fas fa-check"></i> Brake system maintenance</li>
+                                            <li><i class="fas fa-check"></i> Air suspension repair</li>
+                                            <li><i class="fas fa-check"></i> Tire and rim replacement</li>
+                                            <li><i class="fas fa-check"></i> Electrical system repair</li>
+                                            <li><i class="fas fa-check"></i> Welding and fabrication</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Galería de Imágenes -->
+                                    <div class="service-gallery">
+                                        <h4>Work Gallery:</h4>
+                                        <div class="gallery-grid">
+                                            <div class="gallery-item">
+                                                <img src="img/Trailer_repair_1.webp" alt="Reparación de Trailer 1" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_2.jpg" alt="Reparación de Trailer 2" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_3.webp" alt="Reparación de Trailer 3" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_4.webp" alt="Reparación de Trailer 4" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_5.webp" alt="Reparación de Trailer 5" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_6.webp" alt="Reparación de Trailer 6" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_7.webp" alt="Reparación de Trailer 7" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_9.webp" alt="Reparación de Trailer 9" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_10.jpg" alt="Reparación de Trailer 10" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_11.jpg" alt="Reparación de Trailer 11" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_12.jpg" alt="Reparación de Trailer 12" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/trailer_repair_13.jpg" alt="Reparación de Trailer 13" loading="lazy">
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Contacto -->
+                                        <div class="service-contact">
+                                            <h4>Contact Us:</h4>
+                                            <div class="contact-cards">
+                                                <div class="contact-card">
+                                                    <h5>California</h5>
+                                                    <a href="tel:+19097439091" class="phone-link">
+                                                        <i class="fas fa-phone"></i>
+                                                        1(909)-743-9091
+                                                    </a>
+                                                </div>
+                                                <div class="contact-card">
+                                                    <h5>Arkansas</h5>
+                                                    <a href="tel:+14798862439" class="phone-link">
+                                                        <i class="fas fa-phone"></i>
+                                                        1(479)886-2439
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="service-panel" id="truck">
+                                    <div class="service-header">
+                                        <h3><i class="fas fa-truck"></i> TRUCK Repair</h3>
+                                        <p class="service-subtitle">Heavy Duty Truck Repair</p>
+                                    </div>
+                                    <div class="service-description">
+                                        <p>General repair service for cargo trucks, semi-trucks, and heavy-duty vehicles.</p>
+                                    </div>
+                                    <div class="service-features">
+                                        <h4>Services Included:</h4>
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> Diesel engine repair</li>
+                                            <li><i class="fas fa-check"></i> Transmission maintenance</li>
+                                            <li><i class="fas fa-check"></i> Brake system repair</li>
+                                            <li><i class="fas fa-check"></i> Cooling system service</li>
+                                            <li><i class="fas fa-check"></i> Electrical repair</li>
+                                            <li><i class="fas fa-check"></i> Computerized diagnostics</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Galería de Imágenes -->
+                                    <div class="service-gallery">
+                                        <h4>Work Gallery:</h4>
+                                        <div class="gallery-grid">
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_1.webp" alt="Reparación de Truck 1" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_2.webp" alt="Reparación de Truck 2" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_3.webp" alt="Reparación de Truck 3" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_4.webp" alt="Reparación de Truck 4" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_5.webp" alt="Reparación de Truck 5" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_6.webp" alt="Reparación de Truck 6" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_7.webp" alt="Reparación de Truck 7" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_8.jpg" alt="Reparación de Truck 8" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_9.jpg" alt="Reparación de Truck 9" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_10.jpg" alt="Reparación de Truck 10" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_11.jpg" alt="Reparación de Truck 11" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/truck_repair_12.jpg" alt="Reparación de Truck 12" loading="lazy">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Contacto -->
+                                    <div class="service-contact">
+                                        <h4>Contact Us:</h4>
+                                        <div class="contact-cards">
+                                            <div class="contact-card">
+                                                <h5>California</h5>
+                                                <a href="tel:+19097439091" class="phone-link">
+                                                    <i class="fas fa-phone"></i>
+                                                    1(909)-743-9091
+                                                </a>
+                                            </div>
+                                            <div class="contact-card">
+                                                <h5>Arkansas</h5>
+                                                <a href="tel:+14798862439" class="phone-link">
+                                                    <i class="fas fa-phone"></i>
+                                                    1(479)886-2439
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="service-panel" id="differential">
+                                    <div class="service-header">
+                                        <h3><i class="fas fa-cogs"></i> Differentials & Axle Repair</h3>
+                                        <p class="service-subtitle">Differential and Axle Repair</p>
+                                    </div>
+                                    <div class="service-description">
+                                        <p>Repair of the transmission system that allows wheels to turn at different speeds (differential) and the axles that support the wheels.</p>
+                                    </div>
+                                    <div class="service-features">
+                                        <h4>Services Included:</h4>
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> Differential rebuilding</li>
+                                            <li><i class="fas fa-check"></i> Front and rear axle repair</li>
+                                            <li><i class="fas fa-check"></i> Gear replacement</li>
+                                            <li><i class="fas fa-check"></i> Bearing repair</li>
+                                            <li><i class="fas fa-check"></i> Axle alignment</li>
+                                            <li><i class="fas fa-check"></i> Half-shaft repair</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- Galería de Imágenes -->
+                                    <div class="service-gallery">
+                                        <h4>Work Gallery:</h4>
+                                        <div class="gallery-grid">
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_1.jpg" alt="Reparación de Diferenciales 1" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_2.jpg" alt="Reparación de Diferenciales 2" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_3.jpg" alt="Reparación de Diferenciales 3" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_4.jpg" alt="Reparación de Diferenciales 4" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_5.jpg" alt="Reparación de Diferenciales 5" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_6.jpg" alt="Reparación de Diferenciales 6" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_7.jpg" alt="Reparación de Diferenciales 7" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_8.jpg" alt="Reparación de Diferenciales 8" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_9.jpg" alt="Reparación de Diferenciales 9" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_10.jpg" alt="Reparación de Diferenciales 10" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_11.jpg" alt="Reparación de Diferenciales 11" loading="lazy">
+                                            </div>
+                                            <div class="gallery-item">
+                                                <img src="img/differentials_12.jpg" alt="Reparación de Diferenciales 12" loading="lazy">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Contacto -->
+                                    <div class="service-contact">
+                                        <h4>Contact Us:</h4>
+                                        <div class="contact-cards">
+                                            <div class="contact-card">
+                                                <h5>California</h5>
+                                                <a href="tel:+19097439091" class="phone-link">
+                                                    <i class="fas fa-phone"></i>
+                                                    1(909)-743-9091
+                                                </a>
+                                            </div>
+                                            <div class="contact-card">
+                                                <h5>Arkansas</h5>
+                                                <a href="tel:+14798862439" class="phone-link">
+                                                    <i class="fas fa-phone"></i>
+                                                    1(479)886-2439
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="service-panel" id="thermo">
+                                    <div class="service-header">
+                                        <h3><i class="fas fa-snowflake"></i> THERMO KING / CARRIER Repair</h3>
+                                        <p class="service-subtitle">Refrigeration Unit Repair</p>
+                                    </div>
+                                    <div class="service-description">
+                                        <p>Refrigeration system repair for refrigerated trucks. Thermo King and Carrier are the leading brands in transportation refrigeration units.</p>
+                                    </div>
+                                    <div class="service-features">
+                                        <h4>Services Included:</h4>
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> Compressor repair</li>
+                                            <li><i class="fas fa-check"></i> Evaporator maintenance</li>
+                                            <li><i class="fas fa-check"></i> Condenser repair</li>
+                                            <li><i class="fas fa-check"></i> Electrical system service</li>
+                                            <li><i class="fas fa-check"></i> Refrigerant recharge</li>
+                                            <li><i class="fas fa-check"></i> Thermostat calibration</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="service-panel" id="towing">
+                                    <div class="service-header">
+                                        <h3><i class="fas fa-truck-monster"></i> TOWING WRECKER</h3>
+                                        <p class="service-subtitle">Towing and Recovery Service</p>
+                                    </div>
+                                    <div class="service-description">
+                                        <p>Towing service for damaged or accident vehicles. "Wrecker" is the term for towing cranes.</p>
+                                    </div>
+                                    <div class="service-features">
+                                        <h4>Services Included:</h4>
+                                        <ul>
+                                            <li><i class="fas fa-check"></i> Heavy truck towing</li>
+                                            <li><i class="fas fa-check"></i> 24/7 towing service</li>
+                                            <li><i class="fas fa-check"></i> Roadside rescue</li>
+                                            <li><i class="fas fa-check"></i> Vehicle transport</li>
+                                            <li><i class="fas fa-check"></i> Emergency service</li>
+                                            <li><i class="fas fa-check"></i> National coverage</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="#presentation" class="nav-link">Presentation</a></li>
                     <li><a href="#contact" class="nav-link">Contact Us</a></li>
                     <li><a href="#faq" class="nav-link">FAQ</a></li>
@@ -674,6 +999,15 @@
                 </button>
             </div>
             <button class="location-cancel" id="cancelLocationModal">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Modal de Imagen -->
+    <div class="image-modal" id="imageModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img class="modal-image" id="modalImage" src="" alt="">
         </div>
     </div>
 
