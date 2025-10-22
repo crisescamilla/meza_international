@@ -919,6 +919,77 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Touch/Swipe functionality for mobile devices
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+    let isSwipe = false;
+    
+    // Get current active tab index
+    function getCurrentTabIndex() {
+        const activeTab = document.querySelector('.service-tab.active');
+        if (!activeTab) return 0;
+        return Array.from(serviceTabs).indexOf(activeTab);
+    }
+    
+    // Switch to tab by index
+    function switchToTab(index) {
+        if (index >= 0 && index < serviceTabs.length) {
+            serviceTabs[index].click();
+        }
+    }
+    
+    // Touch start
+    servicesDropdown.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isSwipe = false;
+    }, { passive: true });
+    
+    // Touch move
+    servicesDropdown.addEventListener('touchmove', function(e) {
+        if (!startX || !startY) return;
+        
+        endX = e.touches[0].clientX;
+        endY = e.touches[0].clientY;
+        
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+        
+        // Check if horizontal swipe (more horizontal than vertical movement)
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            isSwipe = true;
+            e.preventDefault(); // Prevent scrolling
+        }
+    }, { passive: false });
+    
+    // Touch end
+    servicesDropdown.addEventListener('touchend', function(e) {
+        if (!isSwipe || !startX || !endX) return;
+        
+        const diffX = startX - endX;
+        const currentIndex = getCurrentTabIndex();
+        
+        // Swipe left (next tab)
+        if (diffX > 50) {
+            const nextIndex = (currentIndex + 1) % serviceTabs.length;
+            switchToTab(nextIndex);
+        }
+        // Swipe right (previous tab)
+        else if (diffX < -50) {
+            const prevIndex = currentIndex === 0 ? serviceTabs.length - 1 : currentIndex - 1;
+            switchToTab(prevIndex);
+        }
+        
+        // Reset values
+        startX = 0;
+        startY = 0;
+        endX = 0;
+        endY = 0;
+        isSwipe = false;
+    }, { passive: true });
+    
     // Close dropdown when clicking outside or on overlay
     document.addEventListener('click', function(e) {
         if (servicesContainer && !servicesContainer.contains(e.target)) {

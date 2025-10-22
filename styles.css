@@ -2102,6 +2102,36 @@ textarea:focus {
     align-items: center;
 }
 
+/* Touch/Swipe indicators for mobile */
+.services-dropdown {
+    touch-action: pan-y; /* Allow vertical scrolling but handle horizontal swipes */
+    user-select: none; /* Prevent text selection during swipe */
+}
+
+/* Swipe hint for mobile devices */
+@media (max-width: 768px) {
+    .services-dropdown::before {
+        content: "👆 Desliza para cambiar servicios";
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 1000;
+    }
+    
+    .services-dropdown:hover::before {
+        opacity: 1;
+    }
+}
+
 /* Service Gallery Styles */
 .service-gallery {
     margin-top: 2rem;
