@@ -100,6 +100,8 @@ img/*
 !img/differentials_10.jpg
 !img/differentials_11.jpg
 !img/differentials_12.jpg
+!img/grua_1.jpg
+!img/grua_2.jpg
 
 # Logs
 npm-debug.log*
