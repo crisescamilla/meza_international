@@ -2680,6 +2680,7 @@ textarea:focus {
     .services-dropdown {
         width: 95vw;
         max-height: 80vh;
+        z-index: 2000 !important; /* Ensure it appears above mobile menu */
     }
     
     .service-tab {
@@ -2697,6 +2698,16 @@ textarea:focus {
     
     .services-content {
         padding: 1.5rem;
+    }
+    
+    /* Ensure dropdown is visible when mobile menu is open */
+    .nav-list.active .services-dropdown.show {
+        display: block !important;
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translateX(-50%) translateY(-50%) !important;
+        z-index: 2000 !important;
     }
 }
 

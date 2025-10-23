@@ -219,6 +219,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (dropdown.classList.contains('show')) {
                             dropdown.classList.remove('show');
                             overlay.classList.remove('show');
+                            
+                            // Restore body scroll
+                            document.body.style.overflow = 'auto';
+                            
                             // Close mobile menu when closing services dropdown
                             const navList = document.querySelector('.nav-list');
                             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -227,15 +231,26 @@ document.addEventListener('DOMContentLoaded', function() {
                                 mobileMenuToggle.classList.remove('active');
                             }
                         } else {
-                            // Force centering styles
+                            // Force centering styles for mobile
                             dropdown.style.position = 'fixed';
                             dropdown.style.top = '50%';
                             dropdown.style.left = '50%';
                             dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
-                            dropdown.style.zIndex = '1000';
+                            dropdown.style.zIndex = '2000';
+                            dropdown.style.display = 'block';
+                            
+                            overlay.style.position = 'fixed';
+                            overlay.style.top = '0';
+                            overlay.style.left = '0';
+                            overlay.style.width = '100%';
+                            overlay.style.height = '100%';
+                            overlay.style.zIndex = '1999';
                             
                             dropdown.classList.add('show');
                             overlay.classList.add('show');
+                            
+                            // Prevent body scroll when dropdown is open
+                            document.body.style.overflow = 'hidden';
                         }
                     }
                 }
