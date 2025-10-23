@@ -326,6 +326,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+    // Call dropdown functionality
+    const callDropdownBtn = document.querySelector('.call-dropdown-btn');
+    const callDropdownMenu = document.querySelector('.call-dropdown-menu');
+    
+    if (callDropdownBtn && callDropdownMenu) {
+        callDropdownBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            callDropdownMenu.classList.toggle('show');
+            callDropdownBtn.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!callDropdownBtn.contains(e.target) && !callDropdownMenu.contains(e.target)) {
+                callDropdownMenu.classList.remove('show');
+                callDropdownBtn.classList.remove('active');
+            }
+        });
+        
+        // Close dropdown when clicking on an option
+        const callOptions = document.querySelectorAll('.call-option');
+        callOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                callDropdownMenu.classList.remove('show');
+                callDropdownBtn.classList.remove('active');
+            });
+        });
+    }
+
     // Scroll to top functionality
     const scrollToTopBtn = document.createElement('button');
     scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
