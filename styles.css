@@ -1148,13 +1148,20 @@ section {
 
 .phone-item {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
     margin-bottom: 1rem;
     padding: 1rem;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.phone-item .phone-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .phone-item i {
@@ -1442,6 +1449,8 @@ section {
     flex-direction: column;
     margin-bottom: 0.5rem;
     gap: 0.25rem;
+    min-width: 0;
+    flex: 1;
 }
 
 .contact-label {
@@ -1471,6 +1480,52 @@ section {
         0 0 20px rgba(255, 255, 255, 0.4),
         1px 1px 3px rgba(0, 0, 0, 0.8);
     transform: translateY(-1px);
+}
+
+.footer-email {
+    margin-top: 0.3rem;
+    margin-left: 0.5rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.footer-email a {
+    color: #a0aec0 !important;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-shadow: 
+        0 0 6px rgba(160, 174, 192, 0.3),
+        1px 1px 2px rgba(0, 0, 0, 0.6);
+    word-break: break-all;
+    overflow-wrap: break-word;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.footer-email a:hover {
+    color: #ffffff !important;
+    text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.6),
+        0 0 15px rgba(255, 255, 255, 0.3),
+        1px 1px 2px rgba(0, 0, 0, 0.8);
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for long emails */
+@media (max-width: 768px) {
+    .footer-email a {
+        font-size: 0.8rem;
+        line-height: 1.3;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-email a {
+        font-size: 0.75rem;
+        line-height: 1.4;
+    }
 }
 
 .footer-bottom {
@@ -2236,6 +2291,62 @@ textarea:focus {
     font-size: 1.2rem;
 }
 
+.email-item {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.email-item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1e40af;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    background: rgba(30, 64, 175, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(30, 64, 175, 0.3);
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+.email-link {
+    display: block;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1e40af;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.6rem 1.2rem;
+    background: rgba(30, 64, 175, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(30, 64, 175, 0.3);
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    width: fit-content;
+}
+
+.email-item a:hover {
+    background: rgba(30, 64, 175, 0.2);
+    border-color: rgba(30, 64, 175, 0.5);
+    color: #1d4ed8;
+    transform: scale(1.02);
+}
+
+.email-link:hover {
+    background: rgba(30, 64, 175, 0.2);
+    border-color: rgba(30, 64, 175, 0.5);
+    color: #1d4ed8;
+    transform: scale(1.02);
+}
+
+.email-link i {
+    font-size: 1rem;
+}
+
 /* Responsive Contact */
 @media (max-width: 768px) {
     .contact-cards {
@@ -2251,6 +2362,18 @@ textarea:focus {
         font-size: 1rem;
         padding: 0.7rem 1.2rem;
     }
+    
+    .email-item a {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        width: fit-content;
+    }
+    
+    .email-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        width: fit-content;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2261,6 +2384,18 @@ textarea:focus {
     .phone-link {
         font-size: 0.9rem;
         padding: 0.6rem 1rem;
+    }
+    
+    .email-item a {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        width: fit-content;
+    }
+    
+    .email-link {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        width: fit-content;
     }
 }
 
