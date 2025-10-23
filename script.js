@@ -332,22 +332,26 @@ document.addEventListener('DOMContentLoaded', function() {
     scrollToTopBtn.className = 'scroll-to-top';
     scrollToTopBtn.style.cssText = `
         position: fixed;
-        bottom: 20px;
+        bottom: 80px;
         right: 20px;
-        background: #1e40af;
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
         color: white;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        width: 55px;
+        height: 55px;
         cursor: pointer;
         display: none;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
+        font-size: 20px;
+        box-shadow: 
+            0 8px 25px rgba(30, 64, 175, 0.3),
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1000;
+        backdrop-filter: blur(10px);
     `;
     
     document.body.appendChild(scrollToTopBtn);
@@ -371,13 +375,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add hover effect to scroll to top button
     scrollToTopBtn.addEventListener('mouseenter', function() {
-        this.style.transform = 'scale(1.1)';
-        this.style.background = '#1d4ed8';
+        this.style.transform = 'scale(1.05) translateY(-2px)';
+        this.style.background = 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)';
+        this.style.boxShadow = `
+            0 12px 35px rgba(30, 64, 175, 0.4),
+            0 6px 15px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3)
+        `;
     });
     
     scrollToTopBtn.addEventListener('mouseleave', function() {
-        this.style.transform = 'scale(1)';
-        this.style.background = '#1e40af';
+        this.style.transform = 'scale(1) translateY(0)';
+        this.style.background = 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)';
+        this.style.boxShadow = `
+            0 8px 25px rgba(30, 64, 175, 0.3),
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2)
+        `;
     });
 
     // Intersection Observer for animations
