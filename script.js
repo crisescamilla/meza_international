@@ -219,6 +219,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (dropdown.classList.contains('show')) {
                             dropdown.classList.remove('show');
                             overlay.classList.remove('show');
+                            // Close mobile menu when closing services dropdown
+                            const navList = document.querySelector('.nav-list');
+                            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+                            if (navList && mobileMenuToggle) {
+                                navList.classList.remove('active');
+                                mobileMenuToggle.classList.remove('active');
+                            }
                         } else {
                             // Force centering styles
                             dropdown.style.position = 'fixed';
@@ -248,9 +255,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     behavior: 'smooth'
                 });
                 
-                // Close mobile menu if open
-                navList.classList.remove('active');
-                mobileMenuToggle.classList.remove('active');
+                // Close mobile menu if open (except for Services)
+                if (this.getAttribute('href') !== '#services') {
+                    navList.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                }
                 
                 // Update active nav link
                 navLinks.forEach(navLink => navLink.classList.remove('active'));
@@ -710,6 +719,9 @@ document.addEventListener('click', (e) => {
                     if (dropdown.classList.contains('show')) {
                         dropdown.classList.remove('show');
                         overlay.classList.remove('show');
+                        // Close mobile menu when closing services dropdown
+                        navList.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
                     } else {
                         // Force centering styles
                         dropdown.style.position = 'fixed';
