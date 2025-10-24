@@ -407,27 +407,33 @@ body {
 }
 
 .sticky-menu-toggle {
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(15px);
-    border: 2px solid #ffffff;
-    color: #ffffff;
+    background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
     padding: 1rem;
-    border-radius: 50%;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1.2rem;
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 25px rgba(55, 65, 81, 0.3),
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .sticky-menu-toggle:hover {
-    background: rgba(0, 0, 0, 1);
-    transform: scale(1.1);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.5);
+    transform: scale(1.05) translateY(-2px);
+    background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%);
+    box-shadow: 
+        0 12px 35px rgba(31, 41, 55, 0.4),
+        0 6px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .sticky-nav-list {
@@ -1752,11 +1758,14 @@ section {
 /* Mobile Sticky Navigation */
 @media (max-width: 768px) {
     .sticky-menu-toggle {
-        width: 70px;
-        height: 70px;
-        font-size: 1.4rem;
-        border: 3px solid #ffffff;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.4);
+        width: 55px;
+        height: 55px;
+        font-size: 1.2rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 
+            0 8px 25px rgba(55, 65, 81, 0.3),
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
     
     .sticky-nav-list {
@@ -2650,7 +2659,7 @@ textarea:focus {
     position: fixed;
     bottom: 80px;
     right: 20px;
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+    background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
@@ -2662,7 +2671,7 @@ textarea:focus {
     justify-content: center;
     font-size: 20px;
     box-shadow: 
-        0 8px 25px rgba(30, 64, 175, 0.3),
+        0 8px 25px rgba(55, 65, 81, 0.3),
         0 4px 12px rgba(0, 0, 0, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -2672,9 +2681,9 @@ textarea:focus {
 
 .scroll-to-top:hover {
     transform: scale(1.05) translateY(-2px);
-    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
+    background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%);
     box-shadow: 
-        0 12px 35px rgba(30, 64, 175, 0.4),
+        0 12px 35px rgba(31, 41, 55, 0.4),
         0 6px 15px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }

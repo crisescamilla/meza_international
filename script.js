@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
         position: fixed;
         bottom: 80px;
         right: 20px;
-        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+        background: linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%);
         color: white;
         border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 12px;
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', function() {
         justify-content: center;
         font-size: 20px;
         box-shadow: 
-            0 8px 25px rgba(30, 64, 175, 0.3),
+            0 8px 25px rgba(55, 65, 81, 0.3),
             0 4px 12px rgba(0, 0, 0, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -407,9 +407,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add hover effect to scroll to top button
     scrollToTopBtn.addEventListener('mouseenter', function() {
         this.style.transform = 'scale(1.05) translateY(-2px)';
-        this.style.background = 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)';
+        this.style.background = 'linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%)';
         this.style.boxShadow = `
-            0 12px 35px rgba(30, 64, 175, 0.4),
+            0 12px 35px rgba(31, 41, 55, 0.4),
             0 6px 15px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.3)
         `;
@@ -417,9 +417,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     scrollToTopBtn.addEventListener('mouseleave', function() {
         this.style.transform = 'scale(1) translateY(0)';
-        this.style.background = 'linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)';
+        this.style.background = 'linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%)';
         this.style.boxShadow = `
-            0 8px 25px rgba(30, 64, 175, 0.3),
+            0 8px 25px rgba(55, 65, 81, 0.3),
             0 4px 12px rgba(0, 0, 0, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.2)
         `;
