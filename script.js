@@ -344,6 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!callDropdownBtn.contains(e.target) && !callDropdownMenu.contains(e.target)) {
                 callDropdownMenu.classList.remove('show');
                 callDropdownBtn.classList.remove('active');
+                // Restore body scroll when closing dropdown
+                document.body.style.overflow = 'auto';
             }
         });
         
@@ -353,6 +355,8 @@ document.addEventListener('DOMContentLoaded', function() {
             option.addEventListener('click', function() {
                 callDropdownMenu.classList.remove('show');
                 callDropdownBtn.classList.remove('active');
+                // Restore body scroll when clicking an option
+                document.body.style.overflow = 'auto';
             });
         });
     }
@@ -1336,4 +1340,115 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.overflow = 'auto';
         }
     });
+
+    // Sticky Services Submenu
+    const stickyServicesTrigger = document.querySelector('.sticky-services-trigger');
+    const stickyServicesItem = document.querySelector('.sticky-services-item');
+    const stickyMenu = document.querySelector('.sticky-nav-list');
+    const stickyMenuToggle = document.querySelector('.sticky-menu-toggle');
+    
+    if (stickyServicesTrigger && stickyServicesItem) {
+        stickyServicesTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Toggle the submenu
+            stickyServicesItem.classList.toggle('active');
+        });
+        
+        // Close submenu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!stickyServicesItem.contains(e.target)) {
+                stickyServicesItem.classList.remove('active');
+            }
+        });
+        
+         // Handle service link clicks - IMPROVED VERSION
+         const stickyServiceLinks = document.querySelectorAll('.sticky-service-link');
+         console.log('Found sticky service links:', stickyServiceLinks.length);
+         
+         stickyServiceLinks.forEach(link => {
+             link.addEventListener('click', function(e) {
+                 e.preventDefault();
+                 e.stopPropagation();
+                 
+                 const serviceType = this.getAttribute('data-service');
+                 console.log('Service link clicked:', serviceType);
+                 
+                 // Close the sticky menu and submenu immediately
+                 if (stickyMenu) {
+                     stickyMenu.classList.remove('active');
+                 }
+                 if (stickyMenuToggle) {
+                     stickyMenuToggle.classList.remove('active');
+                 }
+                 stickyServicesItem.classList.remove('active');
+                 
+                 // First, open the services dropdown
+                 const servicesContainer = document.querySelector('.services-dropdown-container');
+                 if (servicesContainer) {
+                     const dropdown = servicesContainer.querySelector('.services-dropdown');
+                     const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                     
+                     if (dropdown && overlay) {
+                         // Force centering styles for mobile
+                         dropdown.style.position = 'fixed';
+                         dropdown.style.top = '50%';
+                         dropdown.style.left = '50%';
+                         dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
+                         dropdown.style.zIndex = '10000';
+                         dropdown.style.display = 'flex';
+                         
+                         overlay.style.position = 'fixed';
+                         overlay.style.top = '0';
+                         overlay.style.left = '0';
+                         overlay.style.width = '100%';
+                         overlay.style.height = '100%';
+                         overlay.style.zIndex = '9999';
+                         
+                         dropdown.classList.add('show');
+                         overlay.classList.add('show');
+                         
+                         // Prevent body scroll when dropdown is open
+                         document.body.style.overflow = 'hidden';
+                     }
+                 }
+                 
+                 // Then activate the correct service tab
+                 setTimeout(() => {
+                     console.log('Activating service:', serviceType);
+                     
+                     // Use the exact same logic as the main service tabs
+                     const serviceTabs = document.querySelectorAll('.service-tab');
+                     const servicePanels = document.querySelectorAll('.service-panel');
+                     
+                     // Remove active class from all tabs and panels
+                     serviceTabs.forEach(t => t.classList.remove('active'));
+                     servicePanels.forEach(p => p.classList.remove('active'));
+                     
+                     // Find and activate the target tab and panel
+                     const targetTab = document.querySelector(`.service-tab[data-service="${serviceType}"]`);
+                     const targetPanel = document.getElementById(serviceType);
+                     
+                     console.log('Target tab found:', targetTab);
+                     console.log('Target panel found:', targetPanel);
+                     
+                     if (targetTab && targetPanel) {
+                         // Add active class to clicked tab and corresponding panel
+                         targetTab.classList.add('active');
+                         targetPanel.classList.add('active');
+                         console.log('Successfully activated service:', serviceType);
+                         
+                         // Scroll to services section
+                         const servicesSection = document.getElementById('services');
+                         if (servicesSection) {
+                             servicesSection.scrollIntoView({ behavior: 'smooth' });
+                         }
+                     } else {
+                         console.error('Could not find tab or panel for service:', serviceType);
+                     }
+                 }, 200); // Increased timeout for better reliability
+             });
+         });
+    }
 });
