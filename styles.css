@@ -2521,6 +2521,12 @@ textarea:focus {
     object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
+    /* Optimize image rendering for performance */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .gallery-item:hover img {
@@ -2530,23 +2536,40 @@ textarea:focus {
 /* Responsive Gallery */
 @media (max-width: 768px) {
     .gallery-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 0.8rem;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.6rem;
     }
     
     .gallery-item img {
-        height: 120px;
+        height: 100px;
+        object-fit: cover;
+        will-change: transform;
+    }
+    
+    /* Limit number of visible images initially on mobile */
+    .service-panel:not(.active) .gallery-item {
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
     .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
     
     .gallery-item img {
-        height: 100px;
+        height: 80px;
+        max-width: 100%;
+    }
+    
+    /* Reduce memory usage on small screens */
+    .service-panel:not(.active) {
+        display: none !important;
+    }
+    
+    .service-panel.active {
+        display: block !important;
     }
 }
 
@@ -3172,6 +3195,29 @@ textarea:focus {
 
 .service-panel.active {
     display: block;
+}
+
+/* Optimize panel rendering for mobile */
+@media (max-width: 768px) {
+    .service-panel {
+        will-change: opacity;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+    }
+    
+    .service-panel:not(.active) {
+        visibility: hidden;
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .service-panel.active {
+        visibility: visible;
+        position: relative;
+        opacity: 1;
+        pointer-events: all;
+    }
 }
 
 .service-header {
