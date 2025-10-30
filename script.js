@@ -510,10 +510,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Preload critical images
     const criticalImages = [
-        '../img/gruameza.jpg',
-        '../img/motor.jpg',
-        '../img/frenos.jpg',
-        '../img/radiador.jpg'
+        'img/gruameza.jpg',
+        'img/motor.jpg',
+        'img/frenos.jpg',
+        'img/radiador.jpg'
     ];
     
     criticalImages.forEach(src => {
