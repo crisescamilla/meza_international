@@ -1012,21 +1012,17 @@ function loadPanelImages(panel) {
             }
             
             // Add error handler to fix corrupted src or retry loading
-            img.onerror = function() {
+            img.onerror = function onImgError() {
                 const attrSrc = this.getAttribute('src');
-                // If src is corrupted to index.html, fix it
-                if (this.src.includes('index.html') && attrSrc && attrSrc.startsWith('img/')) {
+                // Retry ONLY ONCE: if not retried yet and src is corrupted/different, set to attribute src
+                if (!this.dataset.retry && attrSrc && attrSrc.startsWith('img/') && (this.src.includes('index.html') || this.src !== new URL(attrSrc, window.location.origin).href)) {
+                    this.dataset.retry = '1';
                     this.src = attrSrc;
                     return;
                 }
-                // Log real errors
-                if (attrSrc && attrSrc.startsWith('img/')) {
-                    console.warn(`Image failed to load: ${this.src}, original: ${attrSrc}`);
-                    // Try one more time with the attribute src
-                    if (this.src !== attrSrc) {
-                        this.src = attrSrc;
-                    }
-                }
+                // Detach handler to avoid loops and log final failure
+                this.onerror = null;
+                console.warn(`Image failed permanently: ${this.src}`);
             };
             
             // Add load handler for debugging (only in development)
