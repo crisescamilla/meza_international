@@ -1013,42 +1013,50 @@ function loadPanelImages(panel) {
             
             // Force reload if src is incorrect or empty
             if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
-                // Force reload by clearing and resetting src
+                // Force reload by setting src directly (don't clear it first to avoid index.html error)
                 const finalSrc = originalSrc;
-                img.src = '';
                 setTimeout(() => {
                     if (panel.classList.contains('active') && panel.contains(img)) {
-                        img.src = finalSrc;
-                        img.loading = 'eager';
-                        
-                        // Add error handler to retry loading
-                        img.onerror = function() {
-                            console.warn(`Image failed to load: ${finalSrc}, retrying...`);
-                            // Retry once after a short delay
-                            setTimeout(() => {
-                                if (panel.classList.contains('active') && panel.contains(this)) {
-                                    this.src = '';
-                                    this.src = finalSrc;
+                        // Only set if it's different to avoid unnecessary reloads
+                        if (img.src !== finalSrc) {
+                            img.src = finalSrc;
+                            img.loading = 'eager';
+                            
+                            // Add error handler to retry loading
+                            img.onerror = function() {
+                                // Only retry if the src is still the correct one
+                                if (this.getAttribute('src') === finalSrc && this.src.includes('index.html')) {
+                                    console.warn(`Image src corrupted, fixing: ${finalSrc}`);
+                                    // Fix corrupted src
+                                    const correctSrc = this.getAttribute('src');
+                                    this.src = correctSrc;
                                 }
-                            }, 500);
-                        };
-                        
-                        img.onload = function() {
-                            console.log(`Image loaded successfully: ${finalSrc}`);
-                        };
+                            };
+                            
+                            img.onload = function() {
+                                console.log(`Image loaded successfully: ${finalSrc}`);
+                            };
+                        }
                     }
                 }, 10);
             } else {
                 // Even if src looks correct, ensure image loads
                 img.onerror = function() {
-                    console.warn(`Image failed to load: ${this.src}`);
-                    // Try reloading from original src
-                    const origSrc = this.getAttribute('src');
-                    if (origSrc && origSrc !== this.src) {
-                        this.src = '';
-                        setTimeout(() => {
+                    // Only log if it's a real error, not a corrupted src
+                    if (!this.src.includes('index.html')) {
+                        console.warn(`Image failed to load: ${this.src}`);
+                        // Try reloading from original src
+                        const origSrc = this.getAttribute('src');
+                        if (origSrc && origSrc !== this.src && !this.src.includes('index.html')) {
+                            // Fix src directly without clearing
                             this.src = origSrc;
-                        }, 500);
+                        }
+                    } else {
+                        // Fix corrupted src silently
+                        const origSrc = this.getAttribute('src');
+                        if (origSrc && origSrc.startsWith('img/')) {
+                            this.src = origSrc;
+                        }
                     }
                 };
             }
@@ -1081,8 +1089,41 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetPanel = document.getElementById(targetService);
             if (targetPanel) {
                 targetPanel.classList.add('active');
-                // Load images for the active panel immediately
-                loadPanelImages(targetPanel);
+                // Small delay to ensure DOM is updated
+                setTimeout(() => {
+                    if (targetPanel.classList.contains('active')) {
+                        loadPanelImages(targetPanel);
+                        
+                        // Special handling for thermo panel - force image reload
+                        if (targetService === 'thermo') {
+                            const thermoImages = targetPanel.querySelectorAll('img[src*="refrigeration"]');
+                            thermoImages.forEach((img, idx) => {
+                                const originalSrc = img.getAttribute('src');
+                                // Force reload by setting src directly (avoid clearing to prevent index.html error)
+                                setTimeout(() => {
+                                    if (targetPanel.classList.contains('active')) {
+                                        // Only reload if src is different or corrupted
+                                        if (!img.src || img.src.includes('index.html') || img.src !== originalSrc) {
+                                            img.src = originalSrc;
+                                            img.loading = 'eager';
+                                            img.style.display = 'block';
+                                            img.style.visibility = 'visible';
+                                            img.style.opacity = '1';
+                                            
+                                            // Ensure parent is visible
+                                            const galleryItem = img.closest('.gallery-item');
+                                            if (galleryItem) {
+                                                galleryItem.style.display = 'block';
+                                                galleryItem.style.visibility = 'visible';
+                                                galleryItem.style.opacity = '1';
+                                            }
+                                        }
+                                    }
+                                }, idx * 50);
+                            });
+                        }
+                    }
+                }, 100);
             }
         });
     });
@@ -1090,7 +1131,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load images for initially active panel
     const initialPanel = document.querySelector('.service-panel.active');
     if (initialPanel) {
-        loadPanelImages(initialPanel);
+        setTimeout(() => {
+            loadPanelImages(initialPanel);
+            
+            // Special handling if thermo is the initial panel
+            if (initialPanel.id === 'thermo') {
+                const thermoImages = initialPanel.querySelectorAll('img[src*="refrigeration"]');
+                thermoImages.forEach((img, idx) => {
+                                const originalSrc = img.getAttribute('src');
+                                setTimeout(() => {
+                                    if (initialPanel.classList.contains('active')) {
+                                        // Only reload if src is different or corrupted (avoid clearing to prevent index.html error)
+                                        if (!img.src || img.src.includes('index.html') || img.src !== originalSrc) {
+                                            img.src = originalSrc;
+                                            img.loading = 'eager';
+                                            img.style.display = 'block';
+                                            img.style.visibility = 'visible';
+                                            img.style.opacity = '1';
+                                            
+                                            const galleryItem = img.closest('.gallery-item');
+                                            if (galleryItem) {
+                                                galleryItem.style.display = 'block';
+                                                galleryItem.style.visibility = 'visible';
+                                                galleryItem.style.opacity = '1';
+                                            }
+                                        }
+                                    }
+                                }, idx * 50);
+                });
+            }
+        }, 200);
     }
     
     // Touch/Swipe functionality for mobile devices
@@ -1543,8 +1613,41 @@ document.addEventListener('DOMContentLoaded', function() {
                          targetTab.classList.add('active');
                          targetPanel.classList.add('active');
                          
-                         // Load images for the active panel
-                         loadPanelImages(targetPanel);
+                         // Small delay to ensure DOM is updated
+                         setTimeout(() => {
+                             if (targetPanel.classList.contains('active')) {
+                                 loadPanelImages(targetPanel);
+                                 
+                                 // Special handling for thermo panel - force image reload
+                                 if (serviceType === 'thermo') {
+                                     const thermoImages = targetPanel.querySelectorAll('img[src*="refrigeration"]');
+                                     thermoImages.forEach((img, idx) => {
+                                        const originalSrc = img.getAttribute('src');
+                                        // Force reload by setting src directly (avoid clearing to prevent index.html error)
+                                        setTimeout(() => {
+                                            if (targetPanel.classList.contains('active')) {
+                                                // Only reload if src is different or corrupted
+                                                if (!img.src || img.src.includes('index.html') || img.src !== originalSrc) {
+                                                    img.src = originalSrc;
+                                                    img.loading = 'eager';
+                                                    img.style.display = 'block';
+                                                    img.style.visibility = 'visible';
+                                                    img.style.opacity = '1';
+                                                    
+                                                    // Ensure parent is visible
+                                                    const galleryItem = img.closest('.gallery-item');
+                                                    if (galleryItem) {
+                                                        galleryItem.style.display = 'block';
+                                                        galleryItem.style.visibility = 'visible';
+                                                        galleryItem.style.opacity = '1';
+                                                    }
+                                                }
+                                            }
+                                        }, idx * 50);
+                                     });
+                                 }
+                             }
+                         }, 150);
                          console.log('Successfully activated service:', serviceType);
                          
                          // Scroll to services section
