@@ -2546,6 +2546,16 @@ textarea:focus {
         will-change: transform;
     }
     
+    /* Reduce heavy effects on mobile to avoid jank */
+    .gallery-item {
+        box-shadow: none !important;
+        transition: none !important;
+    }
+    .gallery-item:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
     /* Limit number of visible images initially on mobile - BUT ensure active panel shows images */
     .service-panel:not(.active) .gallery-item {
         display: none;

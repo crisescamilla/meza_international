@@ -977,6 +977,7 @@ function loadPanelImages(panel) {
     const images = panel.querySelectorAll('img');
     
     images.forEach((img, index) => {
+        const isMobile = window.innerWidth <= 768;
         // Force visibility for images in active panel
         img.style.display = 'block';
         img.style.visibility = 'visible';
@@ -1001,8 +1002,11 @@ function loadPanelImages(panel) {
         
         // Only process if we have a valid image source
         if (originalSrc && originalSrc.startsWith('img/')) {
-            // Set loading to eager for active panel images
-            img.loading = 'eager';
+            // On mobile keep native lazy loading; on desktop force eager
+            img.loading = isMobile ? 'lazy' : 'eager';
+            img.decoding = 'async';
+            // Hint: lower network priority on mobile
+            try { if (isMobile) { img.fetchPriority = 'low'; } } catch (e) {}
             
             // Check if src needs to be updated (corrupted, empty, or different) and not already failed
             const needsUpdate = (!currentSrc ||
@@ -1011,7 +1015,8 @@ function loadPanelImages(panel) {
                                !currentSrc.includes('img/') ||
                                currentSrc !== originalSrc) && img.dataset.failed !== '1';
             
-            if (needsUpdate) {
+            // On mobile, avoid forcing reloads si el src es válido para no bloquear la UI
+            if (needsUpdate && (!isMobile || !currentSrc || currentSrc.includes('index.html'))) {
                 // Set src directly (avoid clearing to prevent index.html error)
                 img.src = originalSrc;
             }
