@@ -994,36 +994,45 @@ function loadPanelImages(panel) {
         const originalSrc = img.getAttribute('src');
         const currentSrc = img.src;
         
+        // If this image has already failed permanently, skip any updates
+        if (img.dataset.failed === '1') {
+            return;
+        }
+        
         // Only process if we have a valid image source
         if (originalSrc && originalSrc.startsWith('img/')) {
             // Set loading to eager for active panel images
             img.loading = 'eager';
             
-            // Check if src needs to be updated (corrupted, empty, or different)
-            const needsUpdate = !currentSrc || 
-                               currentSrc.includes('data:image') || 
-                               currentSrc.includes('index.html') || 
+            // Check if src needs to be updated (corrupted, empty, or different) and not already failed
+            const needsUpdate = (!currentSrc ||
+                               currentSrc.includes('data:image') ||
+                               currentSrc.includes('index.html') ||
                                !currentSrc.includes('img/') ||
-                               currentSrc !== originalSrc;
+                               currentSrc !== originalSrc) && img.dataset.failed !== '1';
             
             if (needsUpdate) {
                 // Set src directly (avoid clearing to prevent index.html error)
                 img.src = originalSrc;
             }
             
-            // Add error handler to fix corrupted src or retry loading
-            img.onerror = function onImgError() {
-                const attrSrc = this.getAttribute('src');
-                // Retry ONLY ONCE: if not retried yet and src is corrupted/different, set to attribute src
-                if (!this.dataset.retry && attrSrc && attrSrc.startsWith('img/') && (this.src.includes('index.html') || this.src !== new URL(attrSrc, window.location.origin).href)) {
-                    this.dataset.retry = '1';
-                    this.src = attrSrc;
-                    return;
-                }
-                // Detach handler to avoid loops and log final failure
-                this.onerror = null;
-                console.warn(`Image failed permanently: ${this.src}`);
-            };
+            // Attach error handler only once
+            if (!img.dataset.onerrorAttached) {
+                img.dataset.onerrorAttached = '1';
+                img.onerror = function onImgError() {
+                    const attrSrc = this.getAttribute('src');
+                    // Retry ONLY ONCE: if not retried yet and src is corrupted/different, set to attribute src
+                    if (!this.dataset.retry && attrSrc && attrSrc.startsWith('img/') && (this.src.includes('index.html') || this.src !== new URL(attrSrc, window.location.origin).href)) {
+                        this.dataset.retry = '1';
+                        this.src = attrSrc;
+                        return;
+                    }
+                    // Mark as failed and detach handler to avoid loops
+                    this.dataset.failed = '1';
+                    this.onerror = null;
+                    console.warn(`Image failed permanently: ${this.src}`);
+                };
+            }
             
             // Add load handler for debugging (only in development)
             if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {

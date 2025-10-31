@@ -102,7 +102,13 @@ img/*
 !img/differentials_12.jpg
 !img/grua_1.jpg
 !img/grua_2.jpg
-
+!img/refrigeration_1.jpg
+!img/refrigeration_2.jpg
+!img/refrigeration_3.jpg
+!img/refrigeration_4.jpg
+!img/refrigeration_5.jpg
+!img/arrastre_1.jpg
+!img/arrastre_2.jpg 
 # Logs
 npm-debug.log*
 yarn-debug.log*
@@ -152,3 +158,9 @@ jspm_packages/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+!img/**/*.jpg
+!img/**/*.jpeg
+!img/**/*.png
+!img/**/*.webp
+!img/**/*.mp4
