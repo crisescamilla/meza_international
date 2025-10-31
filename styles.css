@@ -2546,9 +2546,20 @@ textarea:focus {
         will-change: transform;
     }
     
-    /* Limit number of visible images initially on mobile */
+    /* Limit number of visible images initially on mobile - BUT ensure active panel shows images */
     .service-panel:not(.active) .gallery-item {
         display: none;
+    }
+    
+    /* Force images to be visible in active panel */
+    .service-panel.active .gallery-item {
+        display: block !important;
+    }
+    
+    .service-panel.active .gallery-item img {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 }
 

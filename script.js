@@ -977,6 +977,19 @@ function loadPanelImages(panel) {
     const images = panel.querySelectorAll('img');
     
     images.forEach((img, index) => {
+        // Force visibility for images in active panel
+        img.style.display = 'block';
+        img.style.visibility = 'visible';
+        img.style.opacity = '1';
+        
+        // Ensure parent gallery-item is visible
+        const galleryItem = img.closest('.gallery-item');
+        if (galleryItem) {
+            galleryItem.style.display = 'block';
+            galleryItem.style.visibility = 'visible';
+            galleryItem.style.opacity = '1';
+        }
+        
         // If image has data-src (from previous unload on mobile), restore it
         if (img.dataset.src && img.dataset.src !== '') {
             const savedSrc = img.dataset.src;
@@ -998,9 +1011,46 @@ function loadPanelImages(panel) {
                 img.loading = 'eager';
             }
             
-            // Only fix src if it's empty, placeholder, or incorrect
+            // Force reload if src is incorrect or empty
             if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
-                img.src = originalSrc;
+                // Force reload by clearing and resetting src
+                const finalSrc = originalSrc;
+                img.src = '';
+                setTimeout(() => {
+                    if (panel.classList.contains('active') && panel.contains(img)) {
+                        img.src = finalSrc;
+                        img.loading = 'eager';
+                        
+                        // Add error handler to retry loading
+                        img.onerror = function() {
+                            console.warn(`Image failed to load: ${finalSrc}, retrying...`);
+                            // Retry once after a short delay
+                            setTimeout(() => {
+                                if (panel.classList.contains('active') && panel.contains(this)) {
+                                    this.src = '';
+                                    this.src = finalSrc;
+                                }
+                            }, 500);
+                        };
+                        
+                        img.onload = function() {
+                            console.log(`Image loaded successfully: ${finalSrc}`);
+                        };
+                    }
+                }, 10);
+            } else {
+                // Even if src looks correct, ensure image loads
+                img.onerror = function() {
+                    console.warn(`Image failed to load: ${this.src}`);
+                    // Try reloading from original src
+                    const origSrc = this.getAttribute('src');
+                    if (origSrc && origSrc !== this.src) {
+                        this.src = '';
+                        setTimeout(() => {
+                            this.src = origSrc;
+                        }, 500);
+                    }
+                };
             }
         }
     });
