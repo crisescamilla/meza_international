@@ -979,23 +979,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to lazy load images in a panel (optimized for mobile)
     function loadPanelImages(panel) {
-        if (!panel) return;
+        if (!panel || !panel.classList.contains('active')) return;
         
         const images = panel.querySelectorAll('img');
+        
         images.forEach((img, index) => {
-            // If image has data-src (from previous unload), restore it
+            // If image has data-src (from previous unload on mobile), restore it
             if (img.dataset.src && img.dataset.src !== '') {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
+                const savedSrc = img.dataset.src;
+                // Only restore if current src is the placeholder
+                if (img.src.includes('data:image') || !img.src || img.src === '') {
+                    img.src = savedSrc;
+                    img.removeAttribute('data-src');
+                }
             }
-            // For images that haven't loaded yet, load them with priority
-            if (!img.complete && img.src && !img.src.includes('data:image')) {
-                // Stagger image loading slightly to prevent blocking
-                setTimeout(() => {
-                    if (img.parentElement && panel.contains(img)) {
-                        img.loading = 'eager';
-                    }
-                }, index * 50); // Small delay between each image
+            
+            // Get the original src from HTML attribute if current src is invalid
+            const originalSrc = img.getAttribute('src');
+            const currentSrc = img.src;
+            
+            // Only process if we have a valid image source
+            if (originalSrc && originalSrc.startsWith('img/')) {
+                // Set loading to eager for active panel images
+                if (img.loading === 'lazy') {
+                    img.loading = 'eager';
+                }
+                
+                // Only fix src if it's empty, placeholder, or incorrect
+                if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
+                    img.src = originalSrc;
+                }
             }
         });
     }
@@ -1009,16 +1022,8 @@ document.addEventListener('DOMContentLoaded', function() {
             serviceTabs.forEach(t => t.classList.remove('active'));
             servicePanels.forEach(p => {
                 p.classList.remove('active');
-                // Unload images from inactive panels on mobile to save memory
-                if (window.innerWidth <= 768) {
-                    const images = p.querySelectorAll('img[src]');
-                    images.forEach(img => {
-                        if (!img.dataset.src) {
-                            img.dataset.src = img.src;
-                            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E';
-                        }
-                    });
-                }
+                // DON'T unload images - let browser handle caching naturally
+                // This was causing issues with image loading
             });
             
             // Add active class to clicked tab and corresponding panel
@@ -1026,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetPanel = document.getElementById(targetService);
             if (targetPanel) {
                 targetPanel.classList.add('active');
-                // Load images for the active panel
+                // Load images for the active panel immediately
                 loadPanelImages(targetPanel);
             }
         });
@@ -1481,16 +1486,7 @@ document.addEventListener('DOMContentLoaded', function() {
                          document.querySelectorAll('.service-tab').forEach(t => t.classList.remove('active'));
                          document.querySelectorAll('.service-panel').forEach(p => {
                              p.classList.remove('active');
-                             // Unload images on mobile when switching
-                             if (window.innerWidth <= 768) {
-                                 const images = p.querySelectorAll('img[src]');
-                                 images.forEach(img => {
-                                     if (!img.dataset.src && !img.src.includes('data:image')) {
-                                         img.dataset.src = img.src;
-                                         img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E';
-                                     }
-                                 });
-                             }
+                             // DON'T unload images - let browser handle caching naturally
                          });
                          
                          // Add active class to clicked tab and corresponding panel
@@ -1499,7 +1495,6 @@ document.addEventListener('DOMContentLoaded', function() {
                          
                          // Load images for the active panel
                          loadPanelImages(targetPanel);
-                         
                          console.log('Successfully activated service:', serviceType);
                          
                          // Scroll to services section
