@@ -990,74 +990,49 @@ function loadPanelImages(panel) {
             galleryItem.style.opacity = '1';
         }
         
-        // If image has data-src (from previous unload on mobile), restore it
-        if (img.dataset.src && img.dataset.src !== '') {
-            const savedSrc = img.dataset.src;
-            // Only restore if current src is the placeholder
-            if (img.src.includes('data:image') || !img.src || img.src === '') {
-                img.src = savedSrc;
-                img.removeAttribute('data-src');
-            }
-        }
-        
-        // Get the original src from HTML attribute if current src is invalid
+        // Get the original src from HTML attribute
         const originalSrc = img.getAttribute('src');
         const currentSrc = img.src;
         
         // Only process if we have a valid image source
         if (originalSrc && originalSrc.startsWith('img/')) {
             // Set loading to eager for active panel images
-            if (img.loading === 'lazy') {
-                img.loading = 'eager';
+            img.loading = 'eager';
+            
+            // Check if src needs to be updated (corrupted, empty, or different)
+            const needsUpdate = !currentSrc || 
+                               currentSrc.includes('data:image') || 
+                               currentSrc.includes('index.html') || 
+                               !currentSrc.includes('img/') ||
+                               currentSrc !== originalSrc;
+            
+            if (needsUpdate) {
+                // Set src directly (avoid clearing to prevent index.html error)
+                img.src = originalSrc;
             }
             
-            // Force reload if src is incorrect or empty
-            if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
-                // Force reload by setting src directly (don't clear it first to avoid index.html error)
-                const finalSrc = originalSrc;
-                setTimeout(() => {
-                    if (panel.classList.contains('active') && panel.contains(img)) {
-                        // Only set if it's different to avoid unnecessary reloads
-                        if (img.src !== finalSrc) {
-                            img.src = finalSrc;
-                            img.loading = 'eager';
-                            
-                            // Add error handler to retry loading
-                            img.onerror = function() {
-                                // Only retry if the src is still the correct one
-                                if (this.getAttribute('src') === finalSrc && this.src.includes('index.html')) {
-                                    console.warn(`Image src corrupted, fixing: ${finalSrc}`);
-                                    // Fix corrupted src
-                                    const correctSrc = this.getAttribute('src');
-                                    this.src = correctSrc;
-                                }
-                            };
-                            
-                            img.onload = function() {
-                                console.log(`Image loaded successfully: ${finalSrc}`);
-                            };
-                        }
+            // Add error handler to fix corrupted src or retry loading
+            img.onerror = function() {
+                const attrSrc = this.getAttribute('src');
+                // If src is corrupted to index.html, fix it
+                if (this.src.includes('index.html') && attrSrc && attrSrc.startsWith('img/')) {
+                    this.src = attrSrc;
+                    return;
+                }
+                // Log real errors
+                if (attrSrc && attrSrc.startsWith('img/')) {
+                    console.warn(`Image failed to load: ${this.src}, original: ${attrSrc}`);
+                    // Try one more time with the attribute src
+                    if (this.src !== attrSrc) {
+                        this.src = attrSrc;
                     }
-                }, 10);
-            } else {
-                // Even if src looks correct, ensure image loads
-                img.onerror = function() {
-                    // Only log if it's a real error, not a corrupted src
-                    if (!this.src.includes('index.html')) {
-                        console.warn(`Image failed to load: ${this.src}`);
-                        // Try reloading from original src
-                        const origSrc = this.getAttribute('src');
-                        if (origSrc && origSrc !== this.src && !this.src.includes('index.html')) {
-                            // Fix src directly without clearing
-                            this.src = origSrc;
-                        }
-                    } else {
-                        // Fix corrupted src silently
-                        const origSrc = this.getAttribute('src');
-                        if (origSrc && origSrc.startsWith('img/')) {
-                            this.src = origSrc;
-                        }
-                    }
+                }
+            };
+            
+            // Add load handler for debugging (only in development)
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                img.onload = function() {
+                    console.log(`Image loaded successfully: ${originalSrc}`);
                 };
             }
         }
