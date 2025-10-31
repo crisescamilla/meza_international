@@ -1002,11 +1002,10 @@ function loadPanelImages(panel) {
         
         // Only process if we have a valid image source
         if (originalSrc && originalSrc.startsWith('img/')) {
-            // On mobile keep native lazy loading; on desktop force eager
-            img.loading = isMobile ? 'lazy' : 'eager';
+            // Para panel ACTIVO: siempre cargar en eager (incluido móvil)
+            img.loading = 'eager';
+            img.setAttribute('loading', 'eager');
             img.decoding = 'async';
-            // Hint: lower network priority on mobile
-            try { if (isMobile) { img.fetchPriority = 'low'; } } catch (e) {}
             
             // Check if src needs to be updated (corrupted, empty, or different) and not already failed
             const needsUpdate = (!currentSrc ||
