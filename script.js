@@ -970,48 +970,48 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Function to lazy load images in a panel (optimized for mobile) - Global function
+function loadPanelImages(panel) {
+    if (!panel || !panel.classList.contains('active')) return;
+    
+    const images = panel.querySelectorAll('img');
+    
+    images.forEach((img, index) => {
+        // If image has data-src (from previous unload on mobile), restore it
+        if (img.dataset.src && img.dataset.src !== '') {
+            const savedSrc = img.dataset.src;
+            // Only restore if current src is the placeholder
+            if (img.src.includes('data:image') || !img.src || img.src === '') {
+                img.src = savedSrc;
+                img.removeAttribute('data-src');
+            }
+        }
+        
+        // Get the original src from HTML attribute if current src is invalid
+        const originalSrc = img.getAttribute('src');
+        const currentSrc = img.src;
+        
+        // Only process if we have a valid image source
+        if (originalSrc && originalSrc.startsWith('img/')) {
+            // Set loading to eager for active panel images
+            if (img.loading === 'lazy') {
+                img.loading = 'eager';
+            }
+            
+            // Only fix src if it's empty, placeholder, or incorrect
+            if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
+                img.src = originalSrc;
+            }
+        }
+    });
+}
+
 // Services Dropdown Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const serviceTabs = document.querySelectorAll('.service-tab');
     const servicePanels = document.querySelectorAll('.service-panel');
     const servicesDropdown = document.querySelector('.services-dropdown');
     const servicesContainer = document.querySelector('.services-dropdown-container');
-    
-    // Function to lazy load images in a panel (optimized for mobile)
-    function loadPanelImages(panel) {
-        if (!panel || !panel.classList.contains('active')) return;
-        
-        const images = panel.querySelectorAll('img');
-        
-        images.forEach((img, index) => {
-            // If image has data-src (from previous unload on mobile), restore it
-            if (img.dataset.src && img.dataset.src !== '') {
-                const savedSrc = img.dataset.src;
-                // Only restore if current src is the placeholder
-                if (img.src.includes('data:image') || !img.src || img.src === '') {
-                    img.src = savedSrc;
-                    img.removeAttribute('data-src');
-                }
-            }
-            
-            // Get the original src from HTML attribute if current src is invalid
-            const originalSrc = img.getAttribute('src');
-            const currentSrc = img.src;
-            
-            // Only process if we have a valid image source
-            if (originalSrc && originalSrc.startsWith('img/')) {
-                // Set loading to eager for active panel images
-                if (img.loading === 'lazy') {
-                    img.loading = 'eager';
-                }
-                
-                // Only fix src if it's empty, placeholder, or incorrect
-                if (!currentSrc || currentSrc.includes('data:image') || currentSrc.includes('index.html') || !currentSrc.includes('img/')) {
-                    img.src = originalSrc;
-                }
-            }
-        });
-    }
     
     // Tab switching functionality
     serviceTabs.forEach(tab => {
