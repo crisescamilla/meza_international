@@ -1147,7 +1147,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200);
     }
     
-    // Touch/Swipe functionality for mobile devices
+    // Touch/Swipe functionality for mobile devices (toggleable)
+    const ENABLE_SERVICES_SWIPE = false; // set to true to enable swipe between tabs
     let startX = 0;
     let startY = 0;
     let endX = 0;
@@ -1169,54 +1170,60 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Touch start
-    servicesDropdown.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        isSwipe = false;
-    }, { passive: true });
+    if (ENABLE_SERVICES_SWIPE) {
+        servicesDropdown.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isSwipe = false;
+        }, { passive: true });
+    }
     
     // Touch move
-    servicesDropdown.addEventListener('touchmove', function(e) {
-        if (!startX || !startY) return;
-        
-        endX = e.touches[0].clientX;
-        endY = e.touches[0].clientY;
-        
-        const diffX = startX - endX;
-        const diffY = startY - endY;
-        
-        // Check if horizontal swipe (more horizontal than vertical movement)
-        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-            isSwipe = true;
-            e.preventDefault(); // Prevent scrolling
-        }
-    }, { passive: false });
+    if (ENABLE_SERVICES_SWIPE) {
+        servicesDropdown.addEventListener('touchmove', function(e) {
+            if (!startX || !startY) return;
+            
+            endX = e.touches[0].clientX;
+            endY = e.touches[0].clientY;
+            
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            
+            // Check if horizontal swipe (more horizontal than vertical movement)
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                isSwipe = true;
+                e.preventDefault(); // Prevent scrolling
+            }
+        }, { passive: false });
+    }
     
     // Touch end
-    servicesDropdown.addEventListener('touchend', function(e) {
-        if (!isSwipe || !startX || !endX) return;
-        
-        const diffX = startX - endX;
-        const currentIndex = getCurrentTabIndex();
-        
-        // Swipe left (next tab)
-        if (diffX > 50) {
-            const nextIndex = (currentIndex + 1) % serviceTabs.length;
-            switchToTab(nextIndex);
-        }
-        // Swipe right (previous tab)
-        else if (diffX < -50) {
-            const prevIndex = currentIndex === 0 ? serviceTabs.length - 1 : currentIndex - 1;
-            switchToTab(prevIndex);
-        }
-        
-        // Reset values
-        startX = 0;
-        startY = 0;
-        endX = 0;
-        endY = 0;
-        isSwipe = false;
-    }, { passive: true });
+    if (ENABLE_SERVICES_SWIPE) {
+        servicesDropdown.addEventListener('touchend', function(e) {
+            if (!isSwipe || !startX || !endX) return;
+            
+            const diffX = startX - endX;
+            const currentIndex = getCurrentTabIndex();
+            
+            // Swipe left (next tab)
+            if (diffX > 50) {
+                const nextIndex = (currentIndex + 1) % serviceTabs.length;
+                switchToTab(nextIndex);
+            }
+            // Swipe right (previous tab)
+            else if (diffX < -50) {
+                const prevIndex = currentIndex === 0 ? serviceTabs.length - 1 : currentIndex - 1;
+                switchToTab(prevIndex);
+            }
+            
+            // Reset values
+            startX = 0;
+            startY = 0;
+            endX = 0;
+            endY = 0;
+            isSwipe = false;
+        }, { passive: true });
+    }
     
     // Close dropdown when clicking outside or on overlay
     document.addEventListener('click', function(e) {
