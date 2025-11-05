@@ -187,106 +187,155 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Mobile Menu Toggle
+// Mobile Menu Toggle - OPTIMIZADO PARA MÓVIL
 document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navList = document.querySelector('.nav-list');
-    
+
+    // Toggle mobile menu - soporta click y touch
     if (mobileMenuToggle && navList) {
-        mobileMenuToggle.addEventListener('click', function() {
+        const handleMenuToggle = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
             navList.classList.toggle('active');
             mobileMenuToggle.classList.toggle('active');
-        });
+        };
+        
+        // Usar ambos eventos para máxima compatibilidad móvil
+        mobileMenuToggle.addEventListener('click', handleMenuToggle);
+        mobileMenuToggle.addEventListener('touchstart', handleMenuToggle, { passive: false });
     }
 
-    // Smooth scrolling for navigation links
+    // Close menu when clicking/touching outside - con delay para evitar conflictos
+    let closeMenuTimeout;
+    function handleOutsideClick(e) {
+        if (navList && mobileMenuToggle) {
+            // Clear any pending timeout
+            if (closeMenuTimeout) clearTimeout(closeMenuTimeout);
+            
+            // Solo cerrar si el click NO fue en el menú o el toggle
+            if (!navList.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                // Pequeño delay para evitar cerrar inmediatamente después de abrir
+                closeMenuTimeout = setTimeout(() => {
+                    navList.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                }, 150);
+            }
+        }
+    }
+    
+    // Usar click con capture phase false y touchstart con delay
+    document.addEventListener('click', handleOutsideClick, true);
+    document.addEventListener('touchstart', function(e) {
+        // Para touch, esperar un poco más para evitar conflictos
+        setTimeout(() => handleOutsideClick(e), 50);
+    }, { passive: true, capture: true });
+
+    // Navigation links - MANEJO MEJORADO PARA MÓVIL
     const navLinks = document.querySelectorAll('.nav-link');
+    
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Check if this is the Services link
-            if (this.getAttribute('href') === '#services') {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Toggle services dropdown
+        // Handler unificado para click y touch
+        const handleNavClick = function(e) {
+            // Prevenir comportamiento por defecto y propagación
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            const href = this.getAttribute('href');
+            if (!href || href.charAt(0) !== '#') return;
+            
+            // CASO 1: Services dropdown
+            if (href === '#services') {
                 const servicesContainer = document.querySelector('.services-dropdown-container');
+                const dropdown = servicesContainer?.querySelector('.services-dropdown');
+                const overlay = servicesContainer?.querySelector('.services-dropdown-overlay');
                 
-                if (servicesContainer) {
-                    const dropdown = servicesContainer.querySelector('.services-dropdown');
-                    const overlay = servicesContainer.querySelector('.services-dropdown-overlay');
+                if (dropdown && overlay) {
+                    const isOpen = dropdown.classList.contains('show');
                     
-                    if (dropdown && overlay) {
-                        if (dropdown.classList.contains('show')) {
-                            dropdown.classList.remove('show');
-                            overlay.classList.remove('show');
-                            
-                            // Restore body scroll
-                            document.body.style.overflow = 'auto';
-                            
-                            // Close mobile menu when closing services dropdown
-                            const navList = document.querySelector('.nav-list');
-                            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                            if (navList && mobileMenuToggle) {
-                                navList.classList.remove('active');
-                                mobileMenuToggle.classList.remove('active');
-                            }
-                        } else {
-                            // Force centering styles for mobile
+                    if (isOpen) {
+                        // Cerrar dropdown
+                        dropdown.classList.remove('show');
+                        overlay.classList.remove('show');
+                        document.body.style.overflow = 'auto';
+                    } else {
+                        // Abrir dropdown - estilos para móvil y desktop
+                        if (window.innerWidth <= 768) {
+                            // Móvil: modal centrado
                             dropdown.style.position = 'fixed';
                             dropdown.style.top = '50%';
                             dropdown.style.left = '50%';
                             dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
-                            dropdown.style.zIndex = '2000';
-                            dropdown.style.display = 'block';
-                            
-                            overlay.style.position = 'fixed';
-                            overlay.style.top = '0';
-                            overlay.style.left = '0';
-                            overlay.style.width = '100%';
-                            overlay.style.height = '100%';
-                            overlay.style.zIndex = '1999';
-                            
-                            dropdown.classList.add('show');
-                            overlay.classList.add('show');
-                            
-                            // Prevent body scroll when dropdown is open
-                            document.body.style.overflow = 'hidden';
+                            dropdown.style.zIndex = '10000';
+                            dropdown.style.display = 'flex';
+                        } else {
+                            // Desktop: posición normal
+                            dropdown.style.position = 'fixed';
+                            dropdown.style.top = '50%';
+                            dropdown.style.left = '50%';
+                            dropdown.style.transform = 'translateX(-50%) translateY(-50%)';
+                            dropdown.style.zIndex = '10000';
+                            dropdown.style.display = 'flex';
                         }
+                        
+                        overlay.style.position = 'fixed';
+                        overlay.style.top = '0';
+                        overlay.style.left = '0';
+                        overlay.style.width = '100%';
+                        overlay.style.height = '100%';
+                        overlay.style.zIndex = '9999';
+                        overlay.style.pointerEvents = 'auto';
+                        
+                        dropdown.classList.add('show');
+                        overlay.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                    
+                    // Cerrar menú móvil
+                    if (navList && mobileMenuToggle) {
+                        navList.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
                     }
                 }
                 return;
             }
-            
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
+
+            // CASO 2: Otros enlaces (Home, Contact, FAQ, About, etc.)
+            const targetSection = document.querySelector(href);
             if (targetSection) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open (except for Services)
-                if (this.getAttribute('href') !== '#services') {
+                // Cerrar menú móvil PRIMERO
+                if (navList && mobileMenuToggle) {
                     navList.classList.remove('active');
                     mobileMenuToggle.classList.remove('active');
                 }
                 
-                // Update active nav link
+                // Calcular posición y hacer scroll suave
+                setTimeout(() => {
+                    const header = document.querySelector('.header');
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const targetPosition = targetSection.offsetTop - headerHeight;
+                    
+                    window.scrollTo({ 
+                        top: targetPosition, 
+                        behavior: 'smooth' 
+                    });
+                }, 150); // Delay aumentado para móvil
+                
+                // Actualizar enlace activo
                 navLinks.forEach(navLink => navLink.classList.remove('active'));
                 this.classList.add('active');
             }
-        });
+        };
+        
+        // Agregar ambos listeners para máxima compatibilidad móvil
+        link.addEventListener('click', handleNavClick, { passive: false });
+        link.addEventListener('touchend', handleNavClick, { passive: false });
     });
 
     // Update active nav link on scroll
     const sections = document.querySelectorAll('section[id]');
-    const headerHeight = document.querySelector('.header').offsetHeight;
-    
+    const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
     window.addEventListener('scroll', function() {
         let current = '';
         sections.forEach(section => {
@@ -295,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 current = section.getAttribute('id');
             }
         });
-        
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === '#' + current) {

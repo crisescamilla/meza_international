@@ -168,6 +168,22 @@
 
 /* Responsive adjustments for loading screen */
 @media (max-width: 768px) {
+    /* Make top nav links easy to tap */
+    .nav-link {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1;
+        touch-action: manipulation;
+    }
+
+    .nav-list { position: relative; z-index: 100; }
+
+    /* Ensure services dropdown doesn't steal taps */
+    .services-dropdown-container { position: static; }
+    .services-dropdown { position: fixed !important; }
     .loading-content {
         padding: 0.5rem;
         max-width: 90%;
@@ -2555,6 +2571,85 @@ textarea:focus {
         transform: none !important;
         box-shadow: none !important;
     }
+
+    /* Fix crítico para navegación móvil - CRÍTICO */
+    .nav-list { 
+        position: relative; 
+        z-index: 1001; 
+        pointer-events: auto; 
+    }
+    .nav-list.active { 
+        display: flex !important; 
+        pointer-events: auto !important; 
+    }
+    .nav-list li { 
+        width: 100%; 
+        pointer-events: auto !important; 
+        position: relative;
+        z-index: 1;
+    }
+    .nav-link {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
+        user-select: none;
+        -webkit-user-select: none;
+        display: block;
+        width: 100%;
+        text-align: left;
+        position: relative;
+        z-index: 1;
+        touch-action: manipulation; /* CRÍTICO: previene delay de 300ms en móvil */
+        min-height: 44px; /* Tamaño mínimo táctil iOS */
+        display: flex;
+        align-items: center;
+    }
+    
+    /* iOS específico - forzar eventos táctiles */
+    .nav-link:active {
+        opacity: 0.7;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Services dropdown container - no debe interferir */
+    .services-dropdown-container {
+        position: static;
+    }
+    
+    /* Services dropdown debe estar por encima de todo */
+    .services-dropdown {
+        position: fixed !important;
+        z-index: 10000 !important;
+    }
+    
+    .services-dropdown.show {
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+    }
+    
+    /* ASEGURAR que las pestañas sean visibles en móvil */
+    .services-dropdown.show .services-tabs {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .services-dropdown.show .service-tab {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .services-dropdown-overlay {
+        position: fixed !important;
+        z-index: 9999 !important;
+    }
+    
+    .services-dropdown-overlay.show {
+        pointer-events: auto !important;
+    }
     
     /* Limit number of visible images initially on mobile - BUT ensure active panel shows images */
     .service-panel:not(.active) .gallery-item {
@@ -3374,12 +3469,22 @@ textarea:focus {
     
     /* Ensure dropdown is visible when mobile menu is open */
     .nav-list.active .services-dropdown.show {
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
         position: fixed !important;
         top: 50% !important;
         left: 50% !important;
         transform: translateX(-50%) translateY(-50%) !important;
         z-index: 2000 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    /* Asegurar que las pestañas sean visibles cuando el menú móvil está abierto */
+    .nav-list.active .services-dropdown.show .services-tabs {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 }
 
@@ -3392,10 +3497,22 @@ textarea:focus {
         transform: translateX(-50%) translateY(-50%) !important;
     }
     
+    .services-dropdown.show {
+        display: flex !important;
+        flex-direction: column !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
     .services-tabs {
         min-height: 70px;
         overflow-x: auto;
         flex-direction: row;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        flex-shrink: 0;
+        width: 100%;
     }
     
     .service-tab {
@@ -3403,17 +3520,22 @@ textarea:focus {
         padding: 0.5rem 0.3rem;
         flex-direction: column;
         text-align: center;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .service-tab i {
         font-size: 1.1rem;
         margin-right: 0;
+        display: block !important;
     }
     
     .service-tab span {
         font-size: 0.7rem;
         text-align: center;
         line-height: 1.1;
+        display: block !important;
     }
     
     .services-content {
