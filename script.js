@@ -196,14 +196,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuToggle && navList) {
         const handleMenuToggle = function(e) {
             e.stopPropagation();
-            e.preventDefault();
+            // Solo prevenir default si el evento es cancelable
+            if (e.cancelable) {
+                e.preventDefault();
+            }
             navList.classList.toggle('active');
             mobileMenuToggle.classList.toggle('active');
         };
         
         // Usar ambos eventos para máxima compatibilidad móvil
         mobileMenuToggle.addEventListener('click', handleMenuToggle);
-        mobileMenuToggle.addEventListener('touchstart', handleMenuToggle, { passive: false });
+        // Para touchstart, usar passive: true para evitar el warning, pero manejar el toggle
+        mobileMenuToggle.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+            // No prevenir default aquí para evitar conflictos con scroll
+            navList.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        }, { passive: true });
     }
 
     // Close menu when clicking/touching outside - con delay para evitar conflictos
@@ -237,8 +246,10 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         // Handler unificado para click y touch
         const handleNavClick = function(e) {
-            // Prevenir comportamiento por defecto y propagación
-            e.preventDefault();
+            // Prevenir comportamiento por defecto y propagación (solo si es cancelable)
+            if (e.cancelable) {
+                e.preventDefault();
+            }
             e.stopPropagation();
             e.stopImmediatePropagation();
             
@@ -1103,10 +1114,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const servicesDropdown = document.querySelector('.services-dropdown');
     const servicesContainer = document.querySelector('.services-dropdown-container');
     
-    // Tab switching functionality
+    // Tab switching functionality - OPTIMIZADO PARA MÓVIL
     serviceTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        // Handler unificado para click y touch
+        const handleTabClick = function(e) {
+            // Prevenir comportamiento por defecto y propagación (solo si es cancelable)
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
             const targetService = this.getAttribute('data-service');
+            console.log('Service tab clicked/touched:', targetService); // Debug
             
             // Remove active class from all tabs and panels
             serviceTabs.forEach(t => t.classList.remove('active'));
@@ -1121,6 +1141,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetPanel = document.getElementById(targetService);
             if (targetPanel) {
                 targetPanel.classList.add('active');
+                console.log('Panel activated:', targetService); // Debug
+                
                 // Small delay to ensure DOM is updated
                 setTimeout(() => {
                     if (targetPanel.classList.contains('active')) {
@@ -1156,8 +1178,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 }, 100);
+            } else {
+                console.error('Panel not found for service:', targetService); // Debug
             }
-        });
+        };
+        
+        // Agregar ambos listeners para máxima compatibilidad móvil
+        tab.addEventListener('click', handleTabClick, { passive: false });
+        tab.addEventListener('touchend', handleTabClick, { passive: false });
     });
     
     // Load images for initially active panel
@@ -1700,5 +1728,199 @@ document.addEventListener('DOMContentLoaded', function() {
                  }, 200); // Increased timeout for better reliability
              });
          });
+    }
+});
+
+// Modal de Servicios para Móviles
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileServicesBtn = document.getElementById('mobileServicesBtn');
+    const mobileServicesModal = document.getElementById('mobileServicesModal');
+    
+    // Controlar posición y visibilidad del botón flotante según el scroll
+    if (mobileServicesBtn) {
+        let lastScrollTop = 0;
+        const hideThreshold = 150; // Ocultar cuando faltan 150px para el final
+        const moveThreshold = 300; // Empezar a mover cuando faltan 300px para el final
+        
+        function handleScroll() {
+            if (window.innerWidth > 768) return; // Solo en móviles
+            
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollBottom = documentHeight - (scrollTop + windowHeight);
+            
+            // Calcular nueva posición
+            let newBottom = 20; // Posición inicial
+            let opacity = 1;
+            let visibility = 'visible';
+            
+            if (scrollBottom < hideThreshold) {
+                // Ocultar completamente cuando está muy cerca del final
+                opacity = 0;
+                visibility = 'hidden';
+                mobileServicesBtn.style.pointerEvents = 'none';
+            } else if (scrollBottom < moveThreshold) {
+                // Mover hacia arriba cuando se acerca al final
+                const distanceFromBottom = scrollBottom;
+                const moveAmount = moveThreshold - distanceFromBottom;
+                newBottom = 20 + (moveAmount * 0.5); // Mover hacia arriba gradualmente
+                opacity = 1;
+                visibility = 'visible';
+                mobileServicesBtn.style.pointerEvents = 'auto';
+            } else {
+                // Posición normal
+                opacity = 1;
+                visibility = 'visible';
+                mobileServicesBtn.style.pointerEvents = 'auto';
+            }
+            
+            // Aplicar cambios con transición suave
+            mobileServicesBtn.style.bottom = newBottom + 'px';
+            mobileServicesBtn.style.opacity = opacity;
+            mobileServicesBtn.style.visibility = visibility;
+            
+            lastScrollTop = scrollTop;
+        }
+        
+        // Escuchar eventos de scroll
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('resize', handleScroll, { passive: true });
+        
+        // Ejecutar al cargar
+        handleScroll();
+    }
+    const mobileServicesClose = document.getElementById('mobileServicesClose');
+    const mobileServicesOverlay = document.querySelector('.mobile-services-overlay');
+    const mobileServiceTabs = document.querySelectorAll('.mobile-service-tab');
+    const mobileServicePanels = document.querySelectorAll('.mobile-service-panel');
+    
+    // Abrir modal
+    if (mobileServicesBtn && mobileServicesModal) {
+        const openModal = function(e) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            e.stopPropagation();
+            
+            mobileServicesModal.classList.add('show');
+            // Solo prevenir scroll del body, no del contenido del modal
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        };
+        
+        mobileServicesBtn.addEventListener('click', openModal);
+        mobileServicesBtn.addEventListener('touchend', openModal);
+    }
+    
+    // Cerrar modal
+    const closeModal = function(e) {
+        if (e.cancelable) {
+            e.preventDefault();
+        }
+        e.stopPropagation();
+        
+        mobileServicesModal.classList.remove('show');
+        // Restaurar scroll del body
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    };
+    
+    if (mobileServicesClose) {
+        mobileServicesClose.addEventListener('click', closeModal);
+        mobileServicesClose.addEventListener('touchend', closeModal);
+    }
+    
+    if (mobileServicesOverlay) {
+        mobileServicesOverlay.addEventListener('click', closeModal);
+        mobileServicesOverlay.addEventListener('touchend', closeModal);
+    }
+    
+    // Cambiar entre pestañas
+    mobileServiceTabs.forEach(tab => {
+        const handleTabClick = function(e) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            e.stopPropagation();
+            
+            const targetService = this.getAttribute('data-service');
+            
+            // Remover active de todas las pestañas y paneles
+            mobileServiceTabs.forEach(t => t.classList.remove('active'));
+            mobileServicePanels.forEach(p => p.classList.remove('active'));
+            
+            // Agregar active a la pestaña clickeada
+            this.classList.add('active');
+            
+            // Mostrar el panel correspondiente
+            const targetPanel = document.getElementById(`mobile-${targetService}`);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        };
+        
+        tab.addEventListener('click', handleTabClick, { passive: false });
+        tab.addEventListener('touchend', handleTabClick, { passive: false });
+    });
+    
+    // Cerrar modal con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && mobileServicesModal && mobileServicesModal.classList.contains('show')) {
+            closeModal(e);
+        }
+    });
+    
+    // Permitir scroll dentro del modal
+    if (mobileServicesModal) {
+        const panels = mobileServicesModal.querySelector('.mobile-services-panels');
+        const tabs = mobileServicesModal.querySelector('.mobile-services-tabs');
+        const overlay = mobileServicesModal.querySelector('.mobile-services-overlay');
+        const content = mobileServicesModal.querySelector('.mobile-services-content');
+        
+        // Asegurar que el scroll funcione en los paneles
+        if (panels) {
+            // Forzar scroll visible y funcional
+            panels.style.overflowY = 'auto';
+            panels.style.webkitOverflowScrolling = 'touch';
+            panels.style.scrollbarWidth = 'thin';
+            panels.style.scrollbarColor = 'rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1)';
+            
+            // NO prevenir NINGÚN evento de touch en los paneles - dejar que el scroll funcione naturalmente
+            panels.addEventListener('touchstart', function(e) {
+                // Solo asegurarse que el overflow esté activo
+                this.style.overflowY = 'auto';
+            }, { passive: true });
+            
+            panels.addEventListener('touchmove', function(e) {
+                // NO prevenir - dejar que el scroll funcione
+            }, { passive: true });
+        }
+        
+        // Prevenir scroll del body cuando el modal está abierto
+        // Solo prevenir en el overlay, no en el contenido
+        if (overlay) {
+            overlay.addEventListener('touchmove', function(e) {
+                // Solo prevenir scroll si el toque es directamente en el overlay
+                if (e.target === overlay) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        }
+        
+        // Asegurar que el modal content NO prevenga scroll
+        if (content) {
+            content.addEventListener('touchmove', function(e) {
+                // NO prevenir - dejar que el scroll funcione
+            }, { passive: true });
+        }
+        
+        // Permitir scroll en tabs horizontalmente
+        if (tabs) {
+            tabs.style.overflowX = 'auto';
+            tabs.style.webkitOverflowScrolling = 'touch';
+        }
     }
 });

@@ -597,6 +597,12 @@
                 <p>Professional truck and trailer repair that comes to you</p>
             </div>
             
+            <!-- Botón flotante para móviles - Abrir pestañas de servicios -->
+            <button class="mobile-services-btn" id="mobileServicesBtn" aria-label="View Services">
+                <i class="fas fa-list"></i>
+                <span>View All Services</span>
+            </button>
+            
             <div class="services-description">
                 <div class="service-intro">
                     <h3>Mobile Service Excellence</h3>
@@ -1169,6 +1175,287 @@
         <div class="modal-content">
             <span class="modal-close">&times;</span>
             <img class="modal-image" id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Modal de Servicios para Móviles -->
+    <div class="mobile-services-modal" id="mobileServicesModal">
+        <div class="mobile-services-overlay"></div>
+        <div class="mobile-services-content">
+            <div class="mobile-services-header">
+                <h3>Our Services</h3>
+                <button class="mobile-services-close" id="mobileServicesClose" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-services-tabs">
+                <button class="mobile-service-tab active" data-service="trailer">
+                    <i class="fas fa-trailer"></i>
+                    <span>Trailer Repair</span>
+                </button>
+                <button class="mobile-service-tab" data-service="truck">
+                    <i class="fas fa-truck"></i>
+                    <span>Truck Repair</span>
+                </button>
+                <button class="mobile-service-tab" data-service="differential">
+                    <i class="fas fa-cogs"></i>
+                    <span>Differentials & Axle</span>
+                </button>
+                <button class="mobile-service-tab" data-service="thermo">
+                    <i class="fas fa-snowflake"></i>
+                    <span>Thermo King / Carrier</span>
+                </button>
+                <button class="mobile-service-tab" data-service="towing">
+                    <i class="fas fa-truck-monster"></i>
+                    <span>Towing Wrecker</span>
+                </button>
+            </div>
+            <div class="mobile-services-panels" id="mobileServicesPanels">
+                <div class="mobile-service-panel active" id="mobile-trailer">
+                    <div class="mobile-service-header-panel">
+                        <h3><i class="fas fa-trailer"></i> TRAILER Repair</h3>
+                        <p class="mobile-service-subtitle">Trailer/Container Repair</p>
+                    </div>
+                    <div class="mobile-service-description">
+                        <p>Comprehensive repair service for cargo trailers, semi-trailers, and containers that attach to trucks.</p>
+                    </div>
+                    <div class="mobile-service-features">
+                        <h4>Services Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Trailer structure repair</li>
+                            <li><i class="fas fa-check"></i> Brake system maintenance</li>
+                            <li><i class="fas fa-check"></i> Air suspension repair</li>
+                            <li><i class="fas fa-check"></i> Tire and rim replacement</li>
+                            <li><i class="fas fa-check"></i> Electrical system repair</li>
+                            <li><i class="fas fa-check"></i> Welding and fabrication</li>
+                        </ul>
+                    </div>
+                    <!-- Contacto integrado en cada panel -->
+                    <div class="mobile-service-contact-panel">
+                        <h4>Contact Us:</h4>
+                        <div class="mobile-contact-cards">
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>California</strong>
+                                    <a href="tel:+19097439091">1(909)-743-9091</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:Mezatruckrepair@hotmail.com">Mezatruckrepair@hotmail.com</a>
+                                </div>
+                            </div>
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>Arkansas</strong>
+                                    <a href="tel:+14798862439">1(479)886-2439</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:mezatruckrepairarkansas@hotmail.com">mezatruckrepairarkansas@hotmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-service-panel" id="mobile-truck">
+                    <div class="mobile-service-header-panel">
+                        <h3><i class="fas fa-truck"></i> TRUCK Repair</h3>
+                        <p class="mobile-service-subtitle">Heavy Duty Truck Repair</p>
+                    </div>
+                    <div class="mobile-service-description">
+                        <p>General repair service for cargo trucks, semi-trucks, and heavy-duty vehicles.</p>
+                    </div>
+                    <div class="mobile-service-features">
+                        <h4>Services Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Diesel engine repair</li>
+                            <li><i class="fas fa-check"></i> Transmission maintenance</li>
+                            <li><i class="fas fa-check"></i> Brake system repair</li>
+                            <li><i class="fas fa-check"></i> Cooling system service</li>
+                            <li><i class="fas fa-check"></i> Electrical repair</li>
+                            <li><i class="fas fa-check"></i> Computerized diagnostics</li>
+                        </ul>
+                    </div>
+                    <!-- Contacto integrado en cada panel -->
+                    <div class="mobile-service-contact-panel">
+                        <h4>Contact Us:</h4>
+                        <div class="mobile-contact-cards">
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>California</strong>
+                                    <a href="tel:+19097439091">1(909)-743-9091</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:Mezatruckrepair@hotmail.com">Mezatruckrepair@hotmail.com</a>
+                                </div>
+                            </div>
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>Arkansas</strong>
+                                    <a href="tel:+14798862439">1(479)886-2439</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:mezatruckrepairarkansas@hotmail.com">mezatruckrepairarkansas@hotmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-service-panel" id="mobile-differential">
+                    <div class="mobile-service-header-panel">
+                        <h3><i class="fas fa-cogs"></i> Differentials & Axle Repair</h3>
+                        <p class="mobile-service-subtitle">Differential and Axle Repair</p>
+                    </div>
+                    <div class="mobile-service-description">
+                        <p>Repair of the transmission system that allows wheels to turn at different speeds (differential) and the axles that support the wheels.</p>
+                    </div>
+                    <div class="mobile-service-features">
+                        <h4>Services Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Differential rebuilding</li>
+                            <li><i class="fas fa-check"></i> Front and rear axle repair</li>
+                            <li><i class="fas fa-check"></i> Gear replacement</li>
+                            <li><i class="fas fa-check"></i> Bearing repair</li>
+                            <li><i class="fas fa-check"></i> Axle alignment</li>
+                            <li><i class="fas fa-check"></i> Half-shaft repair</li>
+                        </ul>
+                    </div>
+                    <!-- Contacto integrado en cada panel -->
+                    <div class="mobile-service-contact-panel">
+                        <h4>Contact Us:</h4>
+                        <div class="mobile-contact-cards">
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>California</strong>
+                                    <a href="tel:+19097439091">1(909)-743-9091</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:Mezatruckrepair@hotmail.com">Mezatruckrepair@hotmail.com</a>
+                                </div>
+                            </div>
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>Arkansas</strong>
+                                    <a href="tel:+14798862439">1(479)886-2439</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:mezatruckrepairarkansas@hotmail.com">mezatruckrepairarkansas@hotmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-service-panel" id="mobile-thermo">
+                    <div class="mobile-service-header-panel">
+                        <h3><i class="fas fa-snowflake"></i> THERMO KING / CARRIER Repair</h3>
+                        <p class="mobile-service-subtitle">Refrigeration Unit Repair</p>
+                    </div>
+                    <div class="mobile-service-description">
+                        <p>Refrigeration system repair for refrigerated trucks. Thermo King and Carrier are the leading brands in transportation refrigeration units.</p>
+                    </div>
+                    <div class="mobile-service-features">
+                        <h4>Services Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Compressor repair</li>
+                            <li><i class="fas fa-check"></i> Evaporator maintenance</li>
+                            <li><i class="fas fa-check"></i> Condenser repair</li>
+                            <li><i class="fas fa-check"></i> Electrical system service</li>
+                            <li><i class="fas fa-check"></i> Refrigerant recharge</li>
+                            <li><i class="fas fa-check"></i> Thermostat calibration</li>
+                        </ul>
+                    </div>
+                    <!-- Contacto integrado en cada panel -->
+                    <div class="mobile-service-contact-panel">
+                        <h4>Contact Us:</h4>
+                        <div class="mobile-contact-cards">
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>California</strong>
+                                    <a href="tel:+19097439091">1(909)-743-9091</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:Mezatruckrepair@hotmail.com">Mezatruckrepair@hotmail.com</a>
+                                </div>
+                            </div>
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>Arkansas</strong>
+                                    <a href="tel:+14798862439">1(479)886-2439</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:mezatruckrepairarkansas@hotmail.com">mezatruckrepairarkansas@hotmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-service-panel" id="mobile-towing">
+                    <div class="mobile-service-header-panel">
+                        <h3><i class="fas fa-truck-monster"></i> TOWING WRECKER</h3>
+                        <p class="mobile-service-subtitle">Towing and Recovery Service</p>
+                    </div>
+                    <div class="mobile-service-description">
+                        <p>Towing service for damaged or accident vehicles. "Wrecker" is the term for towing cranes.</p>
+                    </div>
+                    <div class="mobile-service-features">
+                        <h4>Services Included:</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Heavy truck towing</li>
+                            <li><i class="fas fa-check"></i> 24/7 towing service</li>
+                            <li><i class="fas fa-check"></i> Roadside rescue</li>
+                            <li><i class="fas fa-check"></i> Vehicle transport</li>
+                            <li><i class="fas fa-check"></i> Emergency service</li>
+                            <li><i class="fas fa-check"></i> National coverage</li>
+                        </ul>
+                    </div>
+                    <!-- Contacto integrado en cada panel -->
+                    <div class="mobile-service-contact-panel">
+                        <h4>Contact Us:</h4>
+                        <div class="mobile-contact-cards">
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>California</strong>
+                                    <a href="tel:+19097439091">1(909)-743-9091</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:Mezatruckrepair@hotmail.com">Mezatruckrepair@hotmail.com</a>
+                                </div>
+                            </div>
+                            <div class="mobile-contact-card">
+                                <div class="mobile-contact-info">
+                                    <i class="fas fa-phone"></i>
+                                    <strong>Arkansas</strong>
+                                    <a href="tel:+14798862439">1(479)886-2439</a>
+                                </div>
+                                <div class="mobile-email-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:mezatruckrepairarkansas@hotmail.com">mezatruckrepairarkansas@hotmail.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
