@@ -4016,6 +4016,56 @@ textarea:focus {
     flex-shrink: 0;
 }
 
+/* Galería de Imágenes Móvil */
+.mobile-service-gallery {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mobile-service-gallery h4 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.mobile-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.mobile-gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mobile-gallery-item:hover,
+.mobile-gallery-item:active {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.mobile-gallery-item:hover img,
+.mobile-gallery-item:active img {
+    transform: scale(1.1);
+}
+
 /* Sección de Contacto Móvil - Integrada en cada panel */
 .mobile-service-contact-panel {
     margin-top: 2rem;
@@ -4176,6 +4226,11 @@ textarea:focus {
     .mobile-services-tabs {
         gap: 0.3rem;
         padding: 0.4rem;
+    }
+    
+    .mobile-gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.5rem;
     }
     
     .mobile-contact-cards {

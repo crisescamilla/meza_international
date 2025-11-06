@@ -1532,8 +1532,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalClose = document.querySelector('.modal-close');
     const modalOverlay = document.querySelector('.modal-overlay');
     
-    // Get all gallery images
-    const galleryImages = document.querySelectorAll('.gallery-item img');
+    // Get all gallery images (desktop and mobile)
+    const galleryImages = document.querySelectorAll('.gallery-item img, .mobile-gallery-item img');
     
     // Add click event to each gallery image
     galleryImages.forEach(img => {
